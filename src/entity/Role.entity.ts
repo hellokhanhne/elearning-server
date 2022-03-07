@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { PermissionEntity } from './Permission.entity';
 
-@Entity()
+@Entity('roles')
 export class RoleEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   role_id: number;
@@ -22,6 +22,8 @@ export class RoleEntity extends BaseEntity {
   })
   role_desc: string;
   @ManyToMany((type) => PermissionEntity, (per) => per.permission_roles)
-  @JoinTable()
+  @JoinTable({
+    name: 'role_permission',
+  })
   role_permissions: PermissionEntity[];
 }
