@@ -28,7 +28,6 @@ import { RoleService } from './role.service';
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
   @ApiBody({
-    description: 'Create new role',
     schema: {
       example: {
         role_title: 'name_of_role',
@@ -51,6 +50,14 @@ export class RoleController {
     return await this.roleService.findOne(+id);
   }
 
+  @ApiBody({
+    schema: {
+      example: {
+        role_title: 'name_of_role',
+        role_desc: 'desc_of_role',
+      },
+    },
+  })
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
     return await this.roleService.update(+id, updateRoleDto);

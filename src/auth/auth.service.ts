@@ -8,7 +8,7 @@ import { RoleEntity } from 'src/entity/Role.entity';
 import { StudentEntity } from 'src/entity/Student.entity';
 import { Repository } from 'typeorm';
 import { JwtPayload } from './types/jwtPayload.type';
-import { Tokens } from './types/tokens';
+import { ResLoginSuccess, Tokens } from './types/tokens';
 
 const { OAuth2 } = google.auth;
 
@@ -27,7 +27,7 @@ export class AuthService {
     private perRep: Repository<PermissionEntity>,
   ) {}
   // authentication with google
-  async loginWithGoogle(idToken: string): Promise<Tokens> {
+  async loginWithGoogle(idToken: string): Promise<ResLoginSuccess> {
     try {
       const payload = await client.verifyIdToken({
         idToken,
@@ -40,23 +40,28 @@ export class AuthService {
       );
 
       if (!user) return null;
-      return await this.getToken({
+      const { access_token, refresh_token } = await this.getToken({
         email: payload.getPayload().email,
         id: user.student_id,
         role: user.role_id.role_id,
       });
+      return {
+        access_token,
+        refresh_token,
+        user,
+      };
     } catch (error) {
       console.log(error);
       return null;
     }
   }
   // get access token from refresh_token
-  async refreshToken(payload: JwtPayload): Promise<String> {
+  async refreshToken(payload: JwtPayload): Promise<Object> {
     const access_token = await this.jwtService.signAsync(payload, {
       expiresIn: '15m',
       secret: this.config.get<string>('ACCESS_TOKEN'),
     });
-    return access_token;
+    return { access_token };
   }
   // get accesstoken and refresh_token
   async getToken(payload: JwtPayload): Promise<Tokens> {
