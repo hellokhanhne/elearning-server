@@ -8,6 +8,7 @@ import { StudentEntity } from './entity/Student.entity';
 import { StudentModule } from './student/student.module';
 import { PermissionModule } from './permission/permission.module';
 import { RoleModule } from './role/role.module';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 @Module({
   imports: [
@@ -26,6 +27,16 @@ import { RoleModule } from './role/role.module';
       entities: [StudentEntity, RoleEntity, PermissionEntity],
       synchronize: true,
     }),
+    RedisModule.forRoot({
+      readyLog: true,
+      config: {
+        host: 'containers-us-west-20.railway.app',
+        port: 7442,
+        password: 'GtBsL9q0ffhOyY16BHwT',
+        username: 'default',
+      },
+    }),
+
     StudentModule,
     PermissionModule,
     RoleModule,

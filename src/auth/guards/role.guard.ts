@@ -13,7 +13,7 @@ export const RoleGuard = (): Type<CanActivate> => {
       const request = context.switchToHttp().getRequest<RequestDto>();
 
       const role: RoleEntity = await this.roleRep.findOne(request.user.role, {
-        relations: ['permissions'],
+        relations: ['role_permissions'],
       });
 
       return role.role_permissions

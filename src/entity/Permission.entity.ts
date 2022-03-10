@@ -2,9 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
   ManyToMany,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { RoleEntity } from './Role.entity';

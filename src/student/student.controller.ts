@@ -7,7 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { RequestDto } from 'src/auth/dto/request.dto';
 import { RoleGuard } from 'src/auth/guards/role.guard';
@@ -21,7 +21,7 @@ import { StudentService } from './student.service';
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
 
-  @ApiBearerAuth('access_token')
+  @ApiBearerAuth()
   @Get('/me')
   async profile(@Req() req: RequestDto, @Res() res: Response) {
     const student = await this.studentService.profile(req.user.email);
@@ -30,12 +30,10 @@ export class StudentController {
         .status(HttpStatus.BAD_REQUEST)
         .json(new ResponseEntity(false, 'No student found !'));
     }
-    return res
-      .status(HttpStatus.OK)
-      .json(
-        new ResponseEntity(true, 'Get profile successfully', {
-          data: { student },
-        }),
-      );
+    return res.status(HttpStatus.OK).json(
+      new ResponseEntity(true, 'Get profile successfully', {
+        data: { student },
+      }),
+    );
   }
 }
