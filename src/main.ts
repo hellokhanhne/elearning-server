@@ -11,8 +11,7 @@ async function bootstrap() {
     .setTitle('Elearning')
     .setDescription('Elearning backend')
     .setVersion('1.0')
-    .addTag('El_BE')
-
+    .addTag('El_BACKEND')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
