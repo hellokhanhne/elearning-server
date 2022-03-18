@@ -1,12 +1,20 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
+import { ClassEntity } from './Class.entity';
+import { MarkDetailsEntity } from './Mark_Details.entity';
 import { RoleEntity } from './Role.entity';
+import { SubjectClassEntity } from './SubjectClass.entity';
 
 @Entity('students')
 export class StudentEntity extends BaseEntity {
@@ -40,7 +48,23 @@ export class StudentEntity extends BaseEntity {
     type: 'varchar',
   })
   student_avatar: string;
-  @OneToOne((type) => RoleEntity)
-  @JoinColumn({ name: 'student_role', referencedColumnName: 'role_id' })
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @ManyToOne((type) => ClassEntity, (cl) => cl.class_students)
+  @JoinColumn({ name: 'class_id' })
+  student_class: ClassEntity;
+  @ManyToOne((type) => RoleEntity)
+  @JoinColumn({ name: 'student_role' })
   role_id: RoleEntity;
+
+  @ManyToMany((type) => SubjectClassEntity, (std) => std.subject_class_students)
+  student_subject_classes: SubjectClassEntity;
+
+  @OneToMany((type) => MarkDetailsEntity, (mk) => mk.student)
+  student_marks: MarkDetailsEntity[];
 }

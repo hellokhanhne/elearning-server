@@ -12,3 +12,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ua2hhb
 ###
 get http://localhost:5000/api/student/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ua2hhbmguMjBpdDEyQHZrdS51ZG4udm4iLCJpZCI6Miwicm9sZSI6MiwiaWF0IjoxNjQ2ODg0ODMxLCJleHAiOjE2NDY4ODU3MzF9.VSQVDL-D1o19K5-cq8-cUbHQvXOJp_UfwD02x5yqJXU
+
+###
+DELETE  http://localhost:5000/api/student/1

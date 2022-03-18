@@ -1,6 +1,5 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PermissionEntity } from 'src/entity/Permission.entity';
 import { RoleEntity } from 'src/entity/Role.entity';
 import { PermissionService } from 'src/permission/permission.service';
 import { Repository } from 'typeorm';
@@ -23,7 +22,6 @@ export class RoleService {
       return role;
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException();
     }
   }
 
@@ -33,7 +31,6 @@ export class RoleService {
       return role;
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException();
     }
   }
 
@@ -43,7 +40,6 @@ export class RoleService {
       return role;
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException();
     }
   }
 
@@ -56,7 +52,6 @@ export class RoleService {
       return role;
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException();
     }
   }
 
@@ -64,13 +59,16 @@ export class RoleService {
     id: string,
     updateRolePermission: UpdateRolePermission,
   ) {
-    const role = await this.roleRep.findOne(id);
-    const permissions = await this.permissionService.findByArray(
-      updateRolePermission.permissionIds,
-    );
-    role.role_permissions = permissions;
-
-    return await this.roleRep.save(role);
+    try {
+      const role = await this.roleRep.findOne(id);
+      const permissions = await this.permissionService.findByArray(
+        updateRolePermission.permissionIds,
+      );
+      role.role_permissions = permissions;
+      return await this.roleRep.save(role);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async remove(id: number): Promise<Boolean> {

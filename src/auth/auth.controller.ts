@@ -8,7 +8,13 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Response } from 'express';
 import { ResponseEntity } from 'src/utils/ResponseEntity';
 import { AuthService } from './auth.service';
@@ -25,26 +31,9 @@ export class AuthController {
 
   //  login with google
   @ApiOperation({ description: 'Login with google' })
-  @ApiBody({
-    schema: {
-      example: { tokenId: 'EAKNCJNSNDSN' },
-    },
-  })
-  @ApiResponse({
-    schema: {
-      example: {
-        success: true,
-        message: 'Login successfully !',
-        data: {
-          access_token: 'Ehabc',
-          refresh_token: 'EAKAJVNA',
-          user: {},
-        },
-      },
-    },
-  })
   @Post('/google/login')
   async loginWithGoogle(@Body() body: LoginGoogleDto, @Res() res: Response) {
+    
     const data: ResLoginSuccess = await this.authService.loginWithGoogle(
       body.tokenId,
     );
@@ -74,12 +63,8 @@ export class AuthController {
     description:
       'Get new access_token, please pass refresh_token to Authrize bearer !!! ',
   })
-  @ApiResponse({
-    schema: {
-      example: {},
-    },
-  })
   @UseGuards(RefreshTokenGuard)
+  @ApiBearerAuth()
   @Post('/refresh_token')
   async refreshToken(@Req() req: RequestDto, @Res() res: Response) {
     const data = await this.authService.refreshToken({

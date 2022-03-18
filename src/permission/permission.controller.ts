@@ -1,16 +1,21 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Res,
 } from '@nestjs/common';
-import { PermissionService } from './permission.service';
+import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { ResponseEntity } from 'src/utils/ResponseEntity';
+import { DeletePartternRes, ServerError } from 'src/utils/ResponseParttern';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { PermissionService } from './permission.service';
 
 @ApiTags('/api/permission')
 @Controller('/api/permission')
@@ -18,34 +23,75 @@ export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 
   @Post()
-  create(@Body() createPermissionDto: CreatePermissionDto) {
-    return this.permissionService.create(createPermissionDto);
+  async create(
+    @Body() createPermissionDto: CreatePermissionDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const permission = await this.permissionService.create(
+        createPermissionDto,
+      );
+      return res.status(HttpStatus.OK).json(
+        new ResponseEntity(true, 'Create permission successfully !', {
+          data: permission,
+        }),
+      );
+    } catch (error) {
+      return ServerError({ res });
+    }
   }
 
   @Get()
-  findAll() {
-    return this.permissionService.findAll();
+  async findAll(@Res() res: Response) {
+    const permissions = await this.permissionService.findAll();
+    return res.status(HttpStatus.OK).json(
+      new ResponseEntity(true, 'Get permissions successfully !', {
+        data: permissions,
+      }),
+    );
   }
 
-  findByArray() {
-    return this.permissionService.findAll();
+  async findByArray(permissionsArr: number[]) {
+    return await this.permissionService.findByArray(permissionsArr);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.permissionService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const permission = await this.permissionService.findOne(+id);
+    return res.status(HttpStatus.OK).json(
+      new ResponseEntity(true, 'Get permission successfully !', {
+        data: permission,
+      }),
+    );
   }
 
-  @Patch(':id')
-  update(
+  @Put(':id')
+  async update(
     @Param('id') id: string,
     @Body() updatePermissionDto: UpdatePermissionDto,
+    @Res() res: Response,
   ) {
-    return this.permissionService.update(+id, updatePermissionDto);
+    try {
+      const permission = await this.permissionService.update(
+        +id,
+        updatePermissionDto,
+      );
+      return res.status(HttpStatus.OK).json(
+        new ResponseEntity(true, 'Update permission successfully !', {
+          data: permission,
+        }),
+      );
+    } catch (error) {
+      return ServerError({ res });
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.permissionService.remove(+id);
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    const isDeleted = await this.permissionService.remove(+id);
+    if (isDeleted) {
+      return DeletePartternRes({ res, success: true, type: 'permission' });
+    }
+    return DeletePartternRes({ res, success: false, type: 'permission' });
   }
 }

@@ -5,8 +5,6 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { google } from 'googleapis';
 import { Redis } from 'ioredis';
-import { PermissionEntity } from 'src/entity/Permission.entity';
-import { RoleEntity } from 'src/entity/Role.entity';
 import { StudentEntity } from 'src/entity/Student.entity';
 import { Repository } from 'typeorm';
 import { JwtPayload } from './types/jwtPayload.type';
@@ -23,11 +21,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(StudentEntity)
     private userRepository: Repository<StudentEntity>,
-    @InjectRepository(RoleEntity)
-    private roleRep: Repository<RoleEntity>,
     @InjectRedis() private client: Redis,
-    @InjectRepository(PermissionEntity)
-    private perRep: Repository<PermissionEntity>,
   ) {}
   // authentication with google
   async loginWithGoogle(idToken: string): Promise<ResLoginSuccess> {
@@ -35,21 +29,6 @@ export class AuthService {
       const payload = await client.verifyIdToken({
         idToken,
       });
-
-      // const role = await this.roleRep.findOne(2);
-      // const permission = await this.perRep.findOne(1);
-      // role.role_permissions = [permission];
-      // await role.save();
-      // const newUser = new StudentEntity();
-      // newUser.student_address = '';
-      // newUser.student_avatar = '';
-      // newUser.student_email = 'nnkhanh.20it12@vku.udn.vn';
-      // newUser.student_fisrtName = 'nguyen';
-      // newUser.student_lastName = 'khanh';
-      // newUser.student_mobile = '10202';
-      // newUser.role_id = role;
-
-      // await this.userRepository.save(newUser);
 
       const user = await this.userRepository.findOne(
         {
@@ -59,6 +38,7 @@ export class AuthService {
       );
 
       if (!user) return null;
+
       const { access_token, refresh_token } = await this.getToken({
         email: payload.getPayload().email,
         id: user.student_id,

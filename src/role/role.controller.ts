@@ -18,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ResponseEntity } from 'src/utils/ResponseEntity';
+import { DeletePartternRes, ServerError } from 'src/utils/ResponseParttern';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRolePermission } from './dto/update-role-permission.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -27,51 +28,74 @@ import { RoleService } from './role.service';
 @Controller('/api/role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
-  @ApiBody({
-    schema: {
-      example: {
-        role_title: 'name_of_role',
-        role_desc: 'desc_of_role',
-      },
-    },
-  })
+
   @Post()
-  async create(@Body() createRoleDto: CreateRoleDto) {
-    return await this.roleService.create(createRoleDto);
+  async create(@Body() createRoleDto: CreateRoleDto, @Res() res: Response) {
+    try {
+      const role = await this.roleService.create(createRoleDto);
+      return res.status(HttpStatus.OK).json(
+        new ResponseEntity(true, 'Update role successfully !', {
+          data: role,
+        }),
+      );
+    } catch (error) {
+      return ServerError({ res });
+    }
   }
 
   @Get()
-  async findAll() {
-    return await this.roleService.findAll();
+  async findAll(@Res() res: Response) {
+    const roles = await this.roleService.findAll();
+    return res
+      .status(HttpStatus.OK)
+      .json(new ResponseEntity(true, 'Get role successfully', { data: roles }));
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.roleService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const role = await this.roleService.findOne(+id);
+    return res
+      .status(HttpStatus.OK)
+      .json(new ResponseEntity(true, 'Get role successfully', { data: role }));
   }
 
-  @ApiBody({
-    schema: {
-      example: {
-        role_title: 'name_of_role',
-        role_desc: 'desc_of_role',
-      },
-    },
-  })
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return await this.roleService.update(+id, updateRoleDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateRoleDto: UpdateRoleDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const role = await this.roleService.update(+id, updateRoleDto);
+      return res.status(HttpStatus.OK).json(
+        new ResponseEntity(true, 'Update role successfully !', {
+          data: role,
+        }),
+      );
+    } catch (error) {
+      return ServerError({ res });
+    }
   }
 
   @Patch(':id')
   async updateRolePermission(
     @Param('id') id: string,
     @Body() updateRolePermission: UpdateRolePermission,
+    @Res() res: Response,
   ) {
-    return await this.roleService.updateRolePermission(
-      id,
-      updateRolePermission,
-    );
+    try {
+      const permission = await this.roleService.updateRolePermission(
+        id,
+        updateRolePermission,
+      );
+      return res.status(HttpStatus.OK).json(
+        new ResponseEntity(true, "Update role's permission successfully !", {
+          data: permission,
+        }),
+      );
+    } catch (error) {
+      return ServerError({ res });
+    }
   }
 
   @ApiOkResponse()
@@ -80,13 +104,9 @@ export class RoleController {
   async remove(@Param('id') id: string, @Res() res: Response) {
     const isDeleted = await this.roleService.remove(+id);
     if (isDeleted) {
-      return res
-        .status(HttpStatus.OK)
-        .json(new ResponseEntity(true, 'Delete successfully !'));
+      return DeletePartternRes({ res, success: true, type: 'role' });
     } else {
-      return res
-        .status(HttpStatus.NOT_IMPLEMENTED)
-        .json(new ResponseEntity(false, 'Delete failed !'));
+      return DeletePartternRes({ res, success: false, type: 'role' });
     }
   }
 }

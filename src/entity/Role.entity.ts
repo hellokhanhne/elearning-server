@@ -4,9 +4,11 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PermissionEntity } from './Permission.entity';
+import { StudentEntity } from './Student.entity';
 
 @Entity('roles')
 export class RoleEntity extends BaseEntity {
@@ -26,4 +28,6 @@ export class RoleEntity extends BaseEntity {
     name: 'role_permission',
   })
   role_permissions: PermissionEntity[];
+  @OneToMany((type) => StudentEntity, (std) => std.role_id)
+  students: StudentEntity[];
 }
