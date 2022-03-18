@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SubjectClassService } from './subject-class.service';
 import { CreateSubjectClassDto } from './dto/create-subject-class.dto';
 import { UpdateSubjectClassDto } from './dto/update-subject-class.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('subject-class')
+@ApiTags('/api/subject-class')
+@Controller('/api/subject-class')
 export class SubjectClassController {
   constructor(private readonly subjectClassService: SubjectClassService) {}
 
@@ -23,7 +33,10 @@ export class SubjectClassController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubjectClassDto: UpdateSubjectClassDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateSubjectClassDto: UpdateSubjectClassDto,
+  ) {
     return this.subjectClassService.update(+id, updateSubjectClassDto);
   }
 

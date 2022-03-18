@@ -17,8 +17,8 @@ import { CreateSubjectTypeDto } from './dto/create-subject-type.dto';
 import { UpdateSubjectTypeDto } from './dto/update-subject-type.dto';
 import { SubjectTypeService } from './subject-type.service';
 
-@ApiTags('/subject-type')
-@Controller('subject-type')
+@ApiTags('/api/subject-type')
+@Controller('/api/subject-type')
 export class SubjectTypeController {
   constructor(private readonly subjectTypeService: SubjectTypeService) {}
 

@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MarkDetailsService } from './mark-details.service';
 import { CreateMarkDetailDto } from './dto/create-mark-detail.dto';
 import { UpdateMarkDetailDto } from './dto/update-mark-detail.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('mark-details')
+@ApiTags('/api/mark-details')
+@Controller('/api/mark-details')
 export class MarkDetailsController {
   constructor(private readonly markDetailsService: MarkDetailsService) {}
 
@@ -23,7 +33,10 @@ export class MarkDetailsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMarkDetailDto: UpdateMarkDetailDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMarkDetailDto: UpdateMarkDetailDto,
+  ) {
     return this.markDetailsService.update(+id, updateMarkDetailDto);
   }
 

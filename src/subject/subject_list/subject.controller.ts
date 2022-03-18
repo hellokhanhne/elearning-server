@@ -17,8 +17,8 @@ import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { SubjectService } from './subject.service';
 
-@ApiTags('/subject')
-@Controller('subject')
+@ApiTags('/api/subject')
+@Controller('/api/subject')
 export class SubjectController {
   constructor(private readonly subjectService: SubjectService) {}
 

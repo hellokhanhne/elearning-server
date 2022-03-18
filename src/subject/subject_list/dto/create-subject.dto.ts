@@ -11,4 +11,8 @@ export class CreateSubjectDto {
   @IsNotEmpty()
   @ApiProperty()
   subject_credits: number;
+  @IsNotEmpty()
+  @ApiProperty()
+  subject_short_name: string;
+  subject_img: string;
 }

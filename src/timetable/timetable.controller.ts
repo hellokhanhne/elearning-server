@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TimetableService } from './timetable.service';
 import { CreateTimetableDto } from './dto/create-timetable.dto';
 import { UpdateTimetableDto } from './dto/update-timetable.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('timetable')
+@ApiTags('/api/timetable')
+@Controller('/api/timetable')
 export class TimetableController {
   constructor(private readonly timetableService: TimetableService) {}
 
@@ -23,7 +33,10 @@ export class TimetableController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTimetableDto: UpdateTimetableDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTimetableDto: UpdateTimetableDto,
+  ) {
     return this.timetableService.update(+id, updateTimetableDto);
   }
 

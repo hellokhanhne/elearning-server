@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MarkTypeService } from './mark-type.service';
 import { CreateMarkTypeDto } from './dto/create-mark-type.dto';
 import { UpdateMarkTypeDto } from './dto/update-mark-type.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('mark-type')
+@ApiTags('/api/mark-type')
+@Controller('/api/mark-type')
 export class MarkTypeController {
   constructor(private readonly markTypeService: MarkTypeService) {}
 
@@ -23,7 +33,10 @@ export class MarkTypeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMarkTypeDto: UpdateMarkTypeDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMarkTypeDto: UpdateMarkTypeDto,
+  ) {
     return this.markTypeService.update(+id, updateMarkTypeDto);
   }
 

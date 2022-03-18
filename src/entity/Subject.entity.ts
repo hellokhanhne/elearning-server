@@ -8,7 +8,7 @@ export class SubjectEntity extends BaseEntity {
     type: 'varchar',
     length: 250,
   })
-  subject_name!: string;
+  subject_name: string;
   @Column({
     type: 'varchar',
     length: '50',
@@ -19,7 +19,7 @@ export class SubjectEntity extends BaseEntity {
   @Column({
     type: 'int',
   })
-  subject_credits!: number;
+  subject_credits: number;
   @Column()
   subject_img: string;
 }

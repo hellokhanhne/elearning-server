@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MarkWeightService } from './mark-weight.service';
 import { CreateMarkWeightDto } from './dto/create-mark-weight.dto';
 import { UpdateMarkWeightDto } from './dto/update-mark-weight.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('mark-weight')
+@ApiTags('/api/mark-weight')
+@Controller('/api/mark-weight')
 export class MarkWeightController {
   constructor(private readonly markWeightService: MarkWeightService) {}
 
@@ -23,7 +33,10 @@ export class MarkWeightController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMarkWeightDto: UpdateMarkWeightDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMarkWeightDto: UpdateMarkWeightDto,
+  ) {
     return this.markWeightService.update(+id, updateMarkWeightDto);
   }
 
