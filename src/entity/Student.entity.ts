@@ -7,12 +7,11 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ClassEntity } from './Class.entity';
-import { MarkDetailsEntity } from './Mark_Details.entity';
+import { MarkDetailsEntity } from './Mark_details.entity';
 import { RoleEntity } from './Role.entity';
 import { SubjectClassEntity } from './SubjectClass.entity';
 

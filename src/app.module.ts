@@ -29,7 +29,7 @@ import { MarkTypeModule } from './mark/mark-type/mark-type.module';
 import { MarkWeightModule } from './mark/mark-weight/mark-weight.module';
 import { MarkDetailsModule } from './mark/mark-details/mark-details.module';
 import { MarkTypeEntity } from './entity/Mark_type.entity';
-import { MarkDetailsEntity } from './entity/Mark_Details.entity';
+import { MarkDetailsEntity } from './entity/Mark_details.entity';
 import { MarkWeightEntity } from './entity/Mark_weight.entity';
 
 @Module({
