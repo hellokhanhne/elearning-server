@@ -15,8 +15,10 @@ export class SubjectService {
     try {
       const subject = new SubjectEntity();
       subject.subject_name = createSubjectDto.subject_name;
+      subject.subject_short_name = createSubjectDto.subject_short_name;
       subject.subject_desc = createSubjectDto.subject_desc;
       subject.subject_credits = createSubjectDto.subject_credits;
+      subject.subject_img = createSubjectDto.subject_img;
       await this.subRep.save(subject);
       return subject;
     } catch (error) {
@@ -38,8 +40,10 @@ export class SubjectService {
     try {
       const subject = await this.subRep.findOne(id);
       subject.subject_name = updateSubjectDto.subject_name;
+      subject.subject_short_name = updateSubjectDto.subject_short_name;
       subject.subject_desc = updateSubjectDto.subject_desc;
       subject.subject_credits = updateSubjectDto.subject_credits;
+      subject.subject_img = updateSubjectDto.subject_img;
       await this.subRep.save(subject);
       return subject;
     } catch (error) {

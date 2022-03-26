@@ -8,9 +8,13 @@ import {
   Post,
   Put,
   Res,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { join } from 'path';
+import { ApiFileImages } from 'src/decorators/api-file.decorator';
+import { isFileExtensionSafe, removeFile } from 'src/utils/ImageStorage';
 import { ResponseEntity } from 'src/utils/ResponseEntity';
 import { DeletePartternRes, ServerError } from 'src/utils/ResponseParttern';
 import { CreateSubjectDto } from './dto/create-subject.dto';
@@ -23,11 +27,33 @@ export class SubjectController {
   constructor(private readonly subjectService: SubjectService) {}
 
   @Post()
+  @ApiFileImages('avatar')
+  @ApiOperation({
+    description: 'Use postman to send with file, property : file',
+  })
   async create(
-    @Body() createSubjectDto: CreateSubjectDto,
+    @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
+    @Body()
+    createSubjectDto: CreateSubjectDto,
   ) {
     try {
+      const fileName = file?.filename;
+
+      if (!fileName)
+        return ServerError({
+          res,
+          message: 'File must be a png, jpg/jpeg',
+          status: HttpStatus.BAD_REQUEST,
+        });
+      const imagesFolderPath = join(process.cwd(), 'images');
+      const fullImagePath = join(imagesFolderPath + '/' + file.filename);
+      const isFileLegit = isFileExtensionSafe(fullImagePath);
+      if (!isFileLegit) {
+        removeFile(fullImagePath);
+        return ServerError({ res });
+      }
+      createSubjectDto.subject_img = file.filename;
       const subject = await this.subjectService.create(createSubjectDto);
       return res.status(HttpStatus.OK).json(
         new ResponseEntity(true, 'Create subject successfully', {
