@@ -28,5 +28,5 @@ export class TimeTableEntity extends BaseEntity {
 
   @ManyToOne((type) => SubjectClassEntity, (std) => std.subject_class_timetable)
   @JoinColumn({ name: 'classroom_subject_id' })
-  classroom_subject_classes: SubjectClassEntity[];
+  classroom_subject_class: SubjectClassEntity;
 }

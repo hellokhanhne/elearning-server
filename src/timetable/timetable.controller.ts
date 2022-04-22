@@ -1,16 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Res,
 } from '@nestjs/common';
-import { TimetableService } from './timetable.service';
+import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import {
+  CreatePartterRes,
+  DeletePartternRes,
+  GetDataPartternRes,
+  ServerError,
+  UpdatePartternRes,
+} from 'src/utils/ResponseParttern';
 import { CreateTimetableDto } from './dto/create-timetable.dto';
 import { UpdateTimetableDto } from './dto/update-timetable.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { TimetableService } from './timetable.service';
 
 @ApiTags('/api/timetable')
 @Controller('/api/timetable')
@@ -18,30 +27,77 @@ export class TimetableController {
   constructor(private readonly timetableService: TimetableService) {}
 
   @Post()
-  create(@Body() createTimetableDto: CreateTimetableDto) {
-    return this.timetableService.create(createTimetableDto);
+  async create(
+    @Body() createTimetableDto: CreateTimetableDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const data: any = await this.timetableService.create(createTimetableDto);
+      if (data.error) {
+        return ServerError({
+          res,
+          message: data.error,
+          status: data.status,
+        });
+      }
+      return CreatePartterRes({ res, type: 'timetable', success: true, data });
+    } catch (error) {
+      return ServerError({ res });
+    }
   }
 
   @Get()
-  findAll() {
-    return this.timetableService.findAll();
+  async findAll(@Res() res: Response) {
+    const timetables = await this.timetableService.findAll();
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'timetables',
+      data: timetables,
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.timetableService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const timetable = await this.timetableService.findOne(+id);
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'timetable',
+      data: timetable,
+    });
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateTimetableDto: UpdateTimetableDto,
+    @Res() res: Response,
   ) {
-    return this.timetableService.update(+id, updateTimetableDto);
+    try {
+      const data: any = await this.timetableService.update(
+        +id,
+        updateTimetableDto,
+      );
+      if (data.error) {
+        return ServerError({
+          res,
+          message: data.error,
+          status: data.status,
+        });
+      }
+      return UpdatePartternRes({ res, type: 'timetable', success: true, data });
+    } catch (error) {
+      return ServerError({ res });
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.timetableService.remove(+id);
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    const isDeleted = await this.timetableService.remove(+id);
+    if (!isDeleted) {
+      return DeletePartternRes({ res, success: false, type: 'timetable' });
+    }
+    return DeletePartternRes({ res, success: true, type: 'timetable' });
   }
 }

@@ -9,16 +9,16 @@ import {
   Put,
   Req,
   Res,
+  UploadedFile,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { join } from 'path';
 import { RequestDto } from 'src/auth/dto/request.dto';
-import { RoleGuard } from 'src/auth/guards/role.guard';
-import { StudentEntity } from 'src/entity/Student.entity';
-import { IErrorMsg } from 'src/utils/Error.interface';
-import { ResponseEntity } from 'src/utils/ResponseEntity';
+import { ApiFileImages } from 'src/decorators/api-file.decorator';
+import { isFileExtensionSafe, removeFile } from 'src/utils/ImageStorage';
 import {
   CreatePartterRes,
   DeletePartternRes,
@@ -27,15 +27,15 @@ import {
   UpdatePartternRes,
 } from 'src/utils/ResponseParttern';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentService } from './student.service';
 
 @ApiTags('/api/student')
 @Controller('/api/student')
 // @UseGuards(RoleGuard())
-// @UseGuards(AuthGuard('at_jwt'))
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
-
+  @UseGuards(AuthGuard('at_jwt'))
   @ApiBearerAuth()
   @Get('/me')
   async profile(@Req() req: RequestDto, @Res() res: Response) {
@@ -77,11 +77,33 @@ export class StudentController {
   findByClass() {}
 
   @Post()
+  @ApiFileImages('avatar')
+  @ApiOperation({
+    description: 'Use postman to send with file, property : file',
+  })
   async create(
+    @UploadedFile() file: Express.Multer.File,
     @Body() createStudentDto: CreateStudentDto,
     @Res() res: Response,
   ) {
     try {
+      const fileName = file?.filename;
+
+      if (!fileName)
+        return ServerError({
+          res,
+          message: 'File must be a png/jpg/jpeg',
+          status: HttpStatus.BAD_REQUEST,
+        });
+      const imagesFolderPath = join(process.cwd(), 'images');
+      const fullImagePath = join(imagesFolderPath + '/' + file.filename);
+      const isFileLegit = isFileExtensionSafe(fullImagePath);
+      if (!isFileLegit) {
+        removeFile(fullImagePath);
+        return ServerError({ res });
+      }
+      createStudentDto.student_avatar = file.filename;
+
       const data: any = await this.studentService.create(createStudentDto);
       if (data.error) {
         return ServerError({ res, status: data.status, message: data.error });
@@ -94,13 +116,30 @@ export class StudentController {
   }
 
   @Put('/:id')
+  @ApiFileImages('avatar')
+  @ApiOperation({
+    description: 'Use postman to send with file, property : file',
+  })
   async update(
+    @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,
-    @Body() createStudentDto: CreateStudentDto,
+    @Body() updateStudentDto: UpdateStudentDto,
     @Res() res: Response,
   ) {
     try {
-      const data: any = await this.studentService.update(+id, createStudentDto);
+      const fileName = file?.filename;
+
+      if (fileName) {
+        const imagesFolderPath = join(process.cwd(), 'images');
+        const fullImagePath = join(imagesFolderPath + '/' + file.filename);
+        const isFileLegit = isFileExtensionSafe(fullImagePath);
+        if (!isFileLegit) {
+          removeFile(fullImagePath);
+          return ServerError({ res });
+        }
+        updateStudentDto.student_avatar = file.filename;
+      }
+      const data: any = await this.studentService.update(+id, updateStudentDto);
       if (data.error) {
         return ServerError({ res, status: data.status, message: data.error });
       }

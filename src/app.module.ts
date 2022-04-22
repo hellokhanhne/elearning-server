@@ -1,4 +1,5 @@
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -31,12 +32,16 @@ import { SubjectClassModule } from './subject/subject-class/subject-class.module
 import { SubjectTypeModule } from './subject/subject-type/subject-type.module';
 import { SubjectModule } from './subject/subject_list/subject.module';
 import { TimetableModule } from './timetable/timetable.module';
+import { join } from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'files'),
     }),
 
     AuthModule,

@@ -52,12 +52,14 @@ export class StudentService {
 
     const student = await this.studentRepository.findOne(id);
     student.student_address = updateStudentDto.student_address;
-    student.student_avatar = updateStudentDto.student_avatar;
     student.student_email = updateStudentDto.student_email;
     student.student_fisrtName = updateStudentDto.student_fisrtName;
     student.student_lastName = updateStudentDto.student_lastName;
     student.student_mobile = updateStudentDto.student_mobile;
     student.role_id = role;
+    if (updateStudentDto.student_avatar) {
+      student.student_avatar = updateStudentDto.student_avatar;
+    }
     await this.studentRepository.save(student);
     return student;
   }

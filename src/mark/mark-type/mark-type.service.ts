@@ -1,26 +1,55 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MarkTypeEntity } from 'src/entity/Mark_type.entity';
+import { Repository } from 'typeorm';
 import { CreateMarkTypeDto } from './dto/create-mark-type.dto';
 import { UpdateMarkTypeDto } from './dto/update-mark-type.dto';
 
 @Injectable()
 export class MarkTypeService {
-  create(createMarkTypeDto: CreateMarkTypeDto) {
-    return 'This action adds a new markType';
+  constructor(
+    @InjectRepository(MarkTypeEntity)
+    private markTypeRep: Repository<MarkTypeEntity>,
+  ) {}
+  async create(createMarkTypeDto: CreateMarkTypeDto) {
+    try {
+      const markType = new MarkTypeEntity();
+      markType.mark_type_name = createMarkTypeDto.mark_type_name;
+      await this.markTypeRep.save(markType);
+      return markType;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all markType`;
+  async findAll() {
+    const markTypes = await this.markTypeRep.find();
+    return markTypes;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} markType`;
+  async findOne(id: number) {
+    const markTypes = await this.markTypeRep.findOne(id);
+    return markTypes;
   }
 
-  update(id: number, updateMarkTypeDto: UpdateMarkTypeDto) {
-    return `This action updates a #${id} markType`;
+  async update(id: number, updateMarkTypeDto: UpdateMarkTypeDto) {
+    try {
+      const markType = await this.markTypeRep.findOne(id);
+      markType.mark_type_name = updateMarkTypeDto.mark_type_name;
+      await this.markTypeRep.save(markType);
+      return markType;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} markType`;
+  async remove(id: number) {
+    try {
+      const markType = await this.markTypeRep.findOne(id);
+      await this.markTypeRep.remove(markType);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

@@ -78,9 +78,13 @@ export class LecturersService {
 
       const lecturers = await this.lecRep.findOne(id);
 
+      if (updateLecturerDto.leturer_avatar) {
+        lecturers.leturer_avatar = updateLecturerDto.leturer_avatar;
+      }
+
       lecturers.leturer_firstName = updateLecturerDto.leturer_firstName;
       lecturers.leturer_lastName = updateLecturerDto.leturer_lastName;
-      lecturers.leturer_avatar = updateLecturerDto.leturer_avatar;
+
       lecturers.leturer_birthday = updateLecturerDto.leturer_birthday;
       lecturers.leturer_otherInfo = updateLecturerDto.leturer_otherInfo;
       lecturers.leturer_phone = updateLecturerDto.leturer_phone;

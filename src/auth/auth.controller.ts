@@ -1,6 +1,5 @@
 import {
   Body,
-  ConsoleLogger,
   Controller,
   HttpStatus,
   Post,
@@ -8,13 +7,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ResponseEntity } from 'src/utils/ResponseEntity';
 import { AuthService } from './auth.service';
@@ -33,7 +26,6 @@ export class AuthController {
   @ApiOperation({ description: 'Login with google' })
   @Post('/google/login')
   async loginWithGoogle(@Body() body: LoginGoogleDto, @Res() res: Response) {
-    
     const data: ResLoginSuccess = await this.authService.loginWithGoogle(
       body.tokenId,
     );
@@ -45,7 +37,7 @@ export class AuthController {
     }
     return res
       .status(200)
-      .json(new ResponseEntity(true, 'Login successfully !', { data }));
+      .json(new ResponseEntity(true, 'Login successfully !', data));
   }
 
   // logout
@@ -74,6 +66,6 @@ export class AuthController {
     });
     return res
       .status(HttpStatus.OK)
-      .json(new ResponseEntity(true, 'Get token successfully', { data }));
+      .json(new ResponseEntity(true, 'Get token successfully', data));
   }
 }

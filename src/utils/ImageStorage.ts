@@ -11,7 +11,7 @@ const valiMineFiles: valiMineFile[] = ['image/jpeg', 'image/jpg', 'image/png'];
 
 export const saveImageToStorage = {
   storage: diskStorage({
-    destination: './images',
+    destination: './files/images',
     filename: (req, file, cb) => {
       console.log(file);
       const split = file.originalname.split('.');

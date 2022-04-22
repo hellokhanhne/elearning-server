@@ -12,6 +12,7 @@ import {
 import { LecturersEntity } from './Lecturers.entity';
 import { MarkWeightEntity } from './Mark_weight.entity';
 import { StudentEntity } from './Student.entity';
+import { SubjectEntity } from './Subject.entity';
 import { TimeTableEntity } from './Timetable.entity';
 
 @Entity('subject_class')
@@ -56,11 +57,15 @@ export class SubjectClassEntity extends BaseEntity {
 
   @ManyToOne((type) => LecturersEntity, (lt) => lt.lecturers_classes)
   @JoinColumn({ name: 'leturer_id' })
-  subject_class_leturers: LecturersEntity[];
+  subject_class_leturer: LecturersEntity;
 
-  @OneToMany((type) => TimeTableEntity, (tb) => tb.classroom_subject_classes)
-  subject_class_timetable: TimeTableEntity;
+  @OneToMany((type) => TimeTableEntity, (tb) => tb.classroom_subject_class)
+  subject_class_timetable: TimeTableEntity[];
 
   @OneToMany((type) => MarkWeightEntity, (mk) => mk.subject_class)
   mark_weight: MarkWeightEntity[];
+
+  @ManyToOne((type) => SubjectEntity, (sb) => sb.subject_classes)
+  @JoinColumn({ name: 'subject_id' })
+  subject: SubjectEntity;
 }

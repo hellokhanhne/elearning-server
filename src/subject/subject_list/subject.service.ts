@@ -43,7 +43,9 @@ export class SubjectService {
       subject.subject_short_name = updateSubjectDto.subject_short_name;
       subject.subject_desc = updateSubjectDto.subject_desc;
       subject.subject_credits = updateSubjectDto.subject_credits;
-      subject.subject_img = updateSubjectDto.subject_img;
+      if (updateSubjectDto.subject_img) {
+        subject.subject_img = updateSubjectDto.subject_img;
+      }
       await this.subRep.save(subject);
       return subject;
     } catch (error) {

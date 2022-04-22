@@ -6,11 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { MarkTypeService } from './mark-type.service';
 import { CreateMarkTypeDto } from './dto/create-mark-type.dto';
 import { UpdateMarkTypeDto } from './dto/update-mark-type.dto';
 import { ApiTags } from '@nestjs/swagger';
+import {
+  CreatePartterRes,
+  DeletePartternRes,
+  GetDataPartternRes,
+} from 'src/utils/ResponseParttern';
+import { Response } from 'express';
 
 @ApiTags('/api/mark-type')
 @Controller('/api/mark-type')
@@ -18,18 +25,43 @@ export class MarkTypeController {
   constructor(private readonly markTypeService: MarkTypeService) {}
 
   @Post()
-  create(@Body() createMarkTypeDto: CreateMarkTypeDto) {
-    return this.markTypeService.create(createMarkTypeDto);
+  async create(
+    @Body() createMarkTypeDto: CreateMarkTypeDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const markType = await this.markTypeService.create(createMarkTypeDto);
+      return CreatePartterRes({
+        res,
+        success: true,
+        type: 'mark type',
+        data: markType,
+      });
+    } catch (error) {
+      return CreatePartterRes({ res, success: false, type: 'mark type' });
+    }
   }
 
   @Get()
-  findAll() {
-    return this.markTypeService.findAll();
+  async findAll(@Res() res: Response) {
+    const markTypes = await this.markTypeService.findAll();
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'mark type',
+      data: markTypes,
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.markTypeService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const markType = await this.markTypeService.findOne(+id);
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'mark type',
+      data: markType,
+    });
   }
 
   @Patch(':id')
@@ -41,7 +73,11 @@ export class MarkTypeController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.markTypeService.remove(+id);
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    const isDeleted = await this.markTypeService.remove(+id);
+    if (isDeleted) {
+      return DeletePartternRes({ res, success: true, type: 'mark type' });
+    }
+    return DeletePartternRes({ res, success: false, type: 'mark type' });
   }
 }

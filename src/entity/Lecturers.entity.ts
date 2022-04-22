@@ -61,6 +61,6 @@ export class LecturersEntity extends BaseEntity {
   @JoinColumn({ name: 'student_role', referencedColumnName: 'role_id' })
   role_id: RoleEntity;
 
-  @OneToMany((type) => SubjectClassEntity, (sc) => sc.subject_class_leturers)
+  @OneToMany((type) => SubjectClassEntity, (sc) => sc.subject_class_leturer)
   lecturers_classes: SubjectClassEntity[];
 }

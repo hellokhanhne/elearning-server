@@ -89,6 +89,7 @@ export class SubjectTypeController {
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() res: Response) {
     try {
+      await this.subjectTypeService.remove(+id);
       return DeletePartternRes({ res, success: true, type: 'subject type' });
     } catch (error) {
       return DeletePartternRes({ res, success: false, type: 'subject type' });

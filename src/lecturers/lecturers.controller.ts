@@ -3,13 +3,18 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Post,
   Put,
   Res,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { join } from 'path';
+import { ApiFileImages } from 'src/decorators/api-file.decorator';
+import { isFileExtensionSafe, removeFile } from 'src/utils/ImageStorage';
 import {
   CreatePartterRes,
   DeletePartternRes,
@@ -27,11 +32,32 @@ export class LecturersController {
   constructor(private readonly lecturersService: LecturersService) {}
 
   @Post()
+  @ApiFileImages('avatar')
+  @ApiOperation({
+    description: 'Use postman to send with file, property : file',
+  })
   async create(
+    @UploadedFile() file: Express.Multer.File,
     @Body() createLecturerDto: CreateLecturerDto,
     @Res() res: Response,
   ) {
     try {
+      const fileName = file?.filename;
+
+      if (!fileName)
+        return ServerError({
+          res,
+          message: 'File must be a png/jpg/jpeg',
+          status: HttpStatus.BAD_REQUEST,
+        });
+      const imagesFolderPath = join(process.cwd(), 'images');
+      const fullImagePath = join(imagesFolderPath + '/' + file.filename);
+      const isFileLegit = isFileExtensionSafe(fullImagePath);
+      if (!isFileLegit) {
+        removeFile(fullImagePath);
+        return ServerError({ res });
+      }
+      createLecturerDto.leturer_avatar = file.filename;
       const data: any = await this.lecturersService.create(createLecturerDto);
       if (data.error) {
         return ServerError({ res, message: data.error, status: data.status });
@@ -65,12 +91,29 @@ export class LecturersController {
   }
 
   @Put(':id')
+  @ApiFileImages('avatar')
+  @ApiOperation({
+    description: 'Use postman to send with file, property : file',
+  })
   async update(
+    @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,
     @Body() updateLecturerDto: UpdateLecturerDto,
     @Res() res: Response,
   ) {
     try {
+      const fileName = file?.filename;
+
+      if (fileName) {
+        const imagesFolderPath = join(process.cwd(), 'images');
+        const fullImagePath = join(imagesFolderPath + '/' + file.filename);
+        const isFileLegit = isFileExtensionSafe(fullImagePath);
+        if (!isFileLegit) {
+          removeFile(fullImagePath);
+          return ServerError({ res });
+        }
+        updateLecturerDto.leturer_avatar = file.filename;
+      }
       const data: any = await this.lecturersService.update(
         +id,
         updateLecturerDto,
