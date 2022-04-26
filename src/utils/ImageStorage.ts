@@ -13,7 +13,7 @@ export const saveImageToStorage = {
   storage: diskStorage({
     destination: './files/images',
     filename: (req, file, cb) => {
-      console.log(file);
+      //   console.log(file);
       const split = file.originalname.split('.');
       const fileNameExtension: string = '.' + split[split.length - 1];
       const fileName: string = uuidv4() + fileNameExtension;

@@ -95,9 +95,10 @@ export class StudentController {
           message: 'File must be a png/jpg/jpeg',
           status: HttpStatus.BAD_REQUEST,
         });
-      const imagesFolderPath = join(process.cwd(), 'images');
+      const imagesFolderPath = join(process.cwd(), '/files/images');
       const fullImagePath = join(imagesFolderPath + '/' + file.filename);
-      const isFileLegit = isFileExtensionSafe(fullImagePath);
+      const isFileLegit = await isFileExtensionSafe(fullImagePath);
+
       if (!isFileLegit) {
         removeFile(fullImagePath);
         return ServerError({ res });
@@ -110,7 +111,7 @@ export class StudentController {
       }
       return CreatePartterRes({ res, success: true, type: 'student', data });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       return ServerError({ res });
     }
   }
