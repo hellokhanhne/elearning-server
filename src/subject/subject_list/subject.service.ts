@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SubjectEntity } from 'src/entity/Subject.entity';
+import { SubjectTypeEntity } from 'src/entity/SubjectType.entity';
 import { Repository } from 'typeorm';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
@@ -9,16 +10,24 @@ import { UpdateSubjectDto } from './dto/update-subject.dto';
 export class SubjectService {
   constructor(
     @InjectRepository(SubjectEntity) private subRep: Repository<SubjectEntity>,
+    @InjectRepository(SubjectTypeEntity)
+    private subType: Repository<SubjectTypeEntity>,
   ) {}
 
   async create(createSubjectDto: CreateSubjectDto) {
     try {
+      const subjectType = await this.subType.findOne(
+        createSubjectDto.subject_type_id,
+      );
+
       const subject = new SubjectEntity();
       subject.subject_name = createSubjectDto.subject_name;
       subject.subject_short_name = createSubjectDto.subject_short_name;
       subject.subject_desc = createSubjectDto.subject_desc;
       subject.subject_credits = createSubjectDto.subject_credits;
       subject.subject_img = createSubjectDto.subject_img;
+
+      subject.subject_type = subjectType;
       await this.subRep.save(subject);
       return subject;
     } catch (error) {

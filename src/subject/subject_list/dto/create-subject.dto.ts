@@ -3,22 +3,26 @@ import { Transform } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateSubjectDto {
+  @ApiProperty()
   @IsNotEmpty()
   @Transform(({ value }) => value)
-  @ApiProperty()
   subject_name: string;
+  @ApiProperty()
   @IsNotEmpty()
   @Transform(({ value }) => value)
-  @ApiProperty()
   subject_desc: string;
+  @ApiProperty()
   @IsNotEmpty()
   @Transform(({ value }) => value)
-  @ApiProperty()
   subject_credits: number;
+  @ApiProperty()
   @IsNotEmpty()
   @Transform(({ value }) => value)
-  @ApiProperty()
   subject_short_name: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  @Transform(({ value }) => value)
+  subject_type_id: string;
 
   subject_img: string;
 }

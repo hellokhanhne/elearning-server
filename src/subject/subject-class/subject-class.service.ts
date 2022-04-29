@@ -1,10 +1,15 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LecturersEntity } from 'src/entity/Lecturers.entity';
+import { StudentEntity } from 'src/entity/Student.entity';
+import { SubjectEntity } from 'src/entity/Subject.entity';
 import { SubjectClassEntity } from 'src/entity/SubjectClass.entity';
 import { Repository } from 'typeorm';
 import { CreateSubjectClassDto } from './dto/create-subject-class.dto';
-import { UpdateSubjectClassDto } from './dto/update-subject-class.dto';
+import {
+  UpdateStudentClassDto,
+  UpdateSubjectClassDto,
+} from './dto/update-subject-class.dto';
 
 @Injectable()
 export class SubjectClassService {
@@ -13,11 +18,18 @@ export class SubjectClassService {
     private subclassRep: Repository<SubjectClassEntity>,
     @InjectRepository(LecturersEntity)
     private lecturerRep: Repository<LecturersEntity>,
+    @InjectRepository(SubjectEntity)
+    private subjectRep: Repository<SubjectEntity>,
+    @InjectRepository(StudentEntity)
+    private studentRep: Repository<StudentEntity>,
   ) {}
   async create(createSubjectClassDto: CreateSubjectClassDto) {
     try {
       const leturer = await this.lecturerRep.findOne(
         createSubjectClassDto.lecturer_id,
+      );
+      const subject = await this.subjectRep.findOne(
+        createSubjectClassDto.subject_id,
       );
       if (!leturer) {
         return {
@@ -37,6 +49,8 @@ export class SubjectClassService {
       subjectClass.subject_class_students = [];
       subjectClass.subject_class_timetable = null;
       subjectClass.subject_class_leturer = leturer;
+
+      subjectClass.subject = subject;
       subjectClass.mark_weight = [];
       await this.subclassRep.save(subjectClass);
     } catch (error) {
@@ -45,7 +59,9 @@ export class SubjectClassService {
   }
 
   async findAll() {
-    const subjectClasses = await this.subclassRep.find();
+    const subjectClasses = await this.subclassRep.find({
+      relations: ['subject_class_students', 'subject_class_timetable'],
+    });
     return subjectClasses;
   }
 
@@ -85,6 +101,19 @@ export class SubjectClassService {
       subjectClass.subject_class_leturer = leturer;
       subjectClass.mark_weight = [];
       await this.subclassRep.save(subjectClass);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateStudentsClass(id: number, updateDto: UpdateStudentClassDto) {
+    try {
+      const subjectClass = await this.subclassRep.findOne(id);
+      const students = await this.studentRep.findByIds(updateDto.student_ids);
+
+      subjectClass.subject_class_students = students;
+      await subjectClass.save();
+      return subjectClass;
     } catch (error) {
       console.log(error);
     }

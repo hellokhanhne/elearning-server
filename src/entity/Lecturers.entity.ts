@@ -16,49 +16,29 @@ import { SubjectClassEntity } from './SubjectClass.entity';
 export class LecturersEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   leturer_id: number;
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
+  @Column('text', { nullable: true })
   leturer_firstName: string;
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
+  @Column('text', { nullable: true })
   leturer_lastName: string;
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
+  @Column('text', { nullable: true })
   leturer_avatar: string;
   @Column({
     type: 'varchar',
     nullable: true,
   })
   leturer_website: string;
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
+  @Column('text', { nullable: true })
   leturer_birthday: Date;
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
+  @Column('text', { nullable: true })
   leturer_phone: string;
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
+  @Column('text', { nullable: true })
   leturer_email: string;
 
-  @Column({ type: 'simple-json' })
-  leturer_otherInfo: object;
   @ManyToOne((type) => LevelEntity, (le) => le.lecturers)
   @JoinColumn({ name: 'level_id' })
   leturer_level: LevelEntity;
-  @OneToOne((type) => RoleEntity)
-  @JoinColumn({ name: 'student_role', referencedColumnName: 'role_id' })
+  @ManyToOne((type) => RoleEntity)
+  @JoinColumn({ name: 'leturer_role', referencedColumnName: 'role_id' })
   role_id: RoleEntity;
 
   @OneToMany((type) => SubjectClassEntity, (sc) => sc.subject_class_leturer)

@@ -33,11 +33,9 @@ export class RoleController {
   async create(@Body() createRoleDto: CreateRoleDto, @Res() res: Response) {
     try {
       const role = await this.roleService.create(createRoleDto);
-      return res.status(HttpStatus.OK).json(
-        new ResponseEntity(true, 'Update role successfully !', {
-          data: role,
-        }),
-      );
+      return res
+        .status(HttpStatus.OK)
+        .json(new ResponseEntity(true, 'Create role successfully !', role));
     } catch (error) {
       return ServerError({ res });
     }
@@ -48,7 +46,7 @@ export class RoleController {
     const roles = await this.roleService.findAll();
     return res
       .status(HttpStatus.OK)
-      .json(new ResponseEntity(true, 'Get role successfully', { data: roles }));
+      .json(new ResponseEntity(true, 'Get role successfully', roles));
   }
 
   @Get(':id')
@@ -56,7 +54,7 @@ export class RoleController {
     const role = await this.roleService.findOne(+id);
     return res
       .status(HttpStatus.OK)
-      .json(new ResponseEntity(true, 'Get role successfully', { data: role }));
+      .json(new ResponseEntity(true, 'Get role successfully', role));
   }
 
   @Put(':id')
@@ -67,11 +65,9 @@ export class RoleController {
   ) {
     try {
       const role = await this.roleService.update(+id, updateRoleDto);
-      return res.status(HttpStatus.OK).json(
-        new ResponseEntity(true, 'Update role successfully !', {
-          data: role,
-        }),
-      );
+      return res
+        .status(HttpStatus.OK)
+        .json(new ResponseEntity(true, 'Update role successfully !', role));
     } catch (error) {
       return ServerError({ res });
     }
@@ -88,11 +84,15 @@ export class RoleController {
         id,
         updateRolePermission,
       );
-      return res.status(HttpStatus.OK).json(
-        new ResponseEntity(true, "Update role's permission successfully !", {
-          data: permission,
-        }),
-      );
+      return res
+        .status(HttpStatus.OK)
+        .json(
+          new ResponseEntity(
+            true,
+            "Update role's permission successfully !",
+            permission,
+          ),
+        );
     } catch (error) {
       return ServerError({ res });
     }

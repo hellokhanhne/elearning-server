@@ -15,4 +15,6 @@ export class CreateSubjectClassDto {
   date_end: Date;
   @ApiProperty()
   lecturer_id: number;
+  @ApiProperty()
+  subject_id: number;
 }

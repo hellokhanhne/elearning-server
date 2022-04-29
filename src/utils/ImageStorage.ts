@@ -3,10 +3,10 @@ import fs from 'fs';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
-type validateTypeExtension = 'png' | 'ipg' | 'jpeg';
+type validateTypeExtension = 'png' | 'jpg' | 'jpeg';
 type valiMineFile = 'image/png' | 'image/jpg' | 'image/jpeg';
 
-const validFileExtensions: validateTypeExtension[] = ['ipg', 'jpeg', 'png'];
+const validFileExtensions: validateTypeExtension[] = ['jpg', 'jpeg', 'png'];
 const valiMineFiles: valiMineFile[] = ['image/jpeg', 'image/jpg', 'image/png'];
 
 export const saveImageToStorage = {
@@ -31,7 +31,7 @@ export const isFileExtensionSafe = async (
 ): Promise<boolean> => {
   const fileExtensionAndMimeType: any = await fromFile(fullFilePath);
   if (!fileExtensionAndMimeType) return false;
-
+  // console.log(fileExtensionAndMimeType);
   const isFileTypeLegit = validFileExtensions.includes(
     fileExtensionAndMimeType.ext,
   );

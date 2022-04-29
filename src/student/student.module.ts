@@ -9,10 +9,18 @@ import { RoleService } from 'src/role/role.service';
 import { PermissionModule } from 'src/permission/permission.module';
 import { PermissionService } from 'src/permission/permission.service';
 import { PermissionEntity } from 'src/entity/Permission.entity';
+import { ClassEntity } from 'src/entity/Class.entity';
+import { SubjectClassEntity } from 'src/entity/SubjectClass.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([StudentEntity, RoleEntity, PermissionEntity]),
+    TypeOrmModule.forFeature([
+      StudentEntity,
+      RoleEntity,
+      PermissionEntity,
+      ClassEntity,
+      SubjectClassEntity,
+    ]),
     AuthModule,
     PermissionModule,
   ],

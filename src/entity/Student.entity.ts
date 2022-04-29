@@ -62,7 +62,7 @@ export class StudentEntity extends BaseEntity {
   role_id: RoleEntity;
 
   @ManyToMany((type) => SubjectClassEntity, (std) => std.subject_class_students)
-  student_subject_classes: SubjectClassEntity;
+  student_subject_classes: SubjectClassEntity[];
 
   @OneToMany((type) => MarkDetailsEntity, (mk) => mk.student)
   student_marks: MarkDetailsEntity[];

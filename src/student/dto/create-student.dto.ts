@@ -27,5 +27,9 @@ export class CreateStudentDto {
   @IsNotEmpty()
   @Transform(({ value }) => value)
   role_id: number;
+  @ApiProperty()
+  @IsNotEmpty()
+  @Transform(({ value }) => value)
+  class_id: number;
   student_avatar: string;
 }

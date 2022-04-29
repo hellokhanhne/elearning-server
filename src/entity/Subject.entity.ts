@@ -30,14 +30,16 @@ export class SubjectEntity extends BaseEntity {
     type: 'int',
   })
   subject_credits: number;
-  @Column()
+  @Column({
+    nullable: true,
+  })
   subject_img: string;
 
   @ManyToOne((type) => SubjectTypeEntity, (st) => st.subject_classes)
   @JoinColumn({
     name: 'subject_type_id',
   })
-  subject_type: number;
+  subject_type: SubjectTypeEntity;
 
   @OneToMany((type) => SubjectClassEntity, (sbl) => sbl.subject)
   subject_classes: SubjectClassEntity[];

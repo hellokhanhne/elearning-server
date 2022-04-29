@@ -26,8 +26,8 @@ import { CreateLecturerDto } from './dto/create-lecturer.dto';
 import { UpdateLecturerDto } from './dto/update-lecturer.dto';
 import { LecturersService } from './lecturers.service';
 
-@ApiTags('/lecturers')
-@Controller('lecturers')
+@ApiTags('/api/lecturers')
+@Controller('/api/lecturers')
 export class LecturersController {
   constructor(private readonly lecturersService: LecturersService) {}
 
@@ -50,7 +50,7 @@ export class LecturersController {
           message: 'File must be a png/jpg/jpeg',
           status: HttpStatus.BAD_REQUEST,
         });
-      const imagesFolderPath = join(process.cwd(), 'images');
+      const imagesFolderPath = join(process.cwd(), '/files/images');
       const fullImagePath = join(imagesFolderPath + '/' + file.filename);
       const isFileLegit = isFileExtensionSafe(fullImagePath);
       if (!isFileLegit) {
@@ -63,6 +63,7 @@ export class LecturersController {
         return ServerError({ res, message: data.error, status: data.status });
       }
       return CreatePartterRes({ res, success: true, type: 'lecturer', data });
+      // console.log(createLecturerDto);
     } catch (error) {
       return ServerError({ res });
     }

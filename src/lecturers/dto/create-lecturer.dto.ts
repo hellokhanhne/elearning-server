@@ -5,7 +5,6 @@ export class CreateLecturerDto {
   @ApiProperty()
   @IsNotEmpty()
   @Transform(({ value }) => value)
-  @Transform(({ value }) => value)
   leturer_firstName: string;
   @ApiProperty()
   @IsNotEmpty()
@@ -27,10 +26,7 @@ export class CreateLecturerDto {
   @IsNotEmpty()
   @Transform(({ value }) => value)
   leturer_email: string;
-  @ApiProperty()
-  @IsNotEmpty()
-  @Transform(({ value }) => value)
-  leturer_otherInfo: object;
+
   @ApiProperty()
   @IsNotEmpty()
   @Transform(({ value }) => value)

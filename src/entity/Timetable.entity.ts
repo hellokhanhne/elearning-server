@@ -25,6 +25,10 @@ export class TimeTableEntity extends BaseEntity {
     length: 50,
   })
   classroom: string;
+  @Column({
+    default: true,
+  })
+  status: boolean;
 
   @ManyToOne((type) => SubjectClassEntity, (std) => std.subject_class_timetable)
   @JoinColumn({ name: 'classroom_subject_id' })

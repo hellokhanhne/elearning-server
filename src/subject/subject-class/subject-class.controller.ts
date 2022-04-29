@@ -1,17 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
   Res,
 } from '@nestjs/common';
-import { SubjectClassService } from './subject-class.service';
-import { CreateSubjectClassDto } from './dto/create-subject-class.dto';
-import { UpdateSubjectClassDto } from './dto/update-subject-class.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { IErrorMsg } from 'src/utils/Error.interface';
 import {
   CreatePartterRes,
   DeletePartternRes,
@@ -19,8 +19,12 @@ import {
   ServerError,
   UpdatePartternRes,
 } from 'src/utils/ResponseParttern';
-import { Response } from 'express';
-import { IErrorMsg } from 'src/utils/Error.interface';
+import { CreateSubjectClassDto } from './dto/create-subject-class.dto';
+import {
+  UpdateStudentClassDto,
+  UpdateSubjectClassDto,
+} from './dto/update-subject-class.dto';
+import { SubjectClassService } from './subject-class.service';
 
 @ApiTags('/api/subject-class')
 @Controller('/api/subject-class')
@@ -77,7 +81,7 @@ export class SubjectClassController {
     }
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() updateSubjectClassDto: UpdateSubjectClassDto,
@@ -101,11 +105,31 @@ export class SubjectClassController {
     }
   }
 
+  @Patch('/students/:id')
+  async updateStudentsClass(
+    @Param('id') id: string,
+    @Body() updateDto: UpdateStudentClassDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const subjectClass = await this.subjectClassService.updateStudentsClass(
+        +id,
+        updateDto,
+      );
+      return UpdatePartternRes({
+        res,
+        success: true,
+        type: 'subject class ',
+        data: subjectClass,
+      });
+    } catch (error) {}
+  }
+
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() res: Response) {
     const isDeleted = await this.subjectClassService.remove(+id);
     if (!isDeleted) {
-      return DeletePartternRes({ res, success: false, type: 'subject class' });
+      return DeletePartternRes({ res, success: true, type: 'subject class' });
     }
     return DeletePartternRes({ res, success: false, type: 'subject class' });
   }

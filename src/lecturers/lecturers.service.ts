@@ -32,16 +32,18 @@ export class LecturersService {
       if (!role)
         return { error: 'Role is not found !', status: HttpStatus.BAD_REQUEST };
       const lecturers = new LecturersEntity();
+
       lecturers.leturer_firstName = createLecturerDto.leturer_firstName;
       lecturers.leturer_lastName = createLecturerDto.leturer_lastName;
       lecturers.leturer_avatar = createLecturerDto.leturer_avatar;
       lecturers.leturer_birthday = createLecturerDto.leturer_birthday;
-      lecturers.leturer_otherInfo = createLecturerDto.leturer_otherInfo;
+      lecturers.leturer_email = createLecturerDto.leturer_email;
       lecturers.leturer_phone = createLecturerDto.leturer_phone;
       lecturers.leturer_website = createLecturerDto.leturer_website;
       lecturers.leturer_level = level;
       lecturers.role_id = role;
-      await this.lecRep.save(level);
+
+      await this.lecRep.save(lecturers);
       return lecturers;
     } catch (error) {
       console.log(error);
@@ -49,7 +51,7 @@ export class LecturersService {
   }
 
   async findAll(): Promise<LecturersEntity[]> {
-    const lecturers = await this.lecRep.find();
+    const lecturers = await this.lecRep.find({ relations: ['role_id'] });
     return lecturers;
   }
 
@@ -84,14 +86,15 @@ export class LecturersService {
 
       lecturers.leturer_firstName = updateLecturerDto.leturer_firstName;
       lecturers.leturer_lastName = updateLecturerDto.leturer_lastName;
-
+      lecturers.leturer_avatar = updateLecturerDto.leturer_avatar;
       lecturers.leturer_birthday = updateLecturerDto.leturer_birthday;
-      lecturers.leturer_otherInfo = updateLecturerDto.leturer_otherInfo;
+      lecturers.leturer_email = updateLecturerDto.leturer_email;
       lecturers.leturer_phone = updateLecturerDto.leturer_phone;
       lecturers.leturer_website = updateLecturerDto.leturer_website;
       lecturers.leturer_level = level;
       lecturers.role_id = role;
-      await this.lecRep.save(level);
+
+      await this.lecRep.save(lecturers);
       return lecturers;
     } catch (error) {
       console.log(error);

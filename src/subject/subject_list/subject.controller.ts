@@ -29,7 +29,7 @@ export class SubjectController {
   @Post()
   @ApiFileImages('image')
   @ApiOperation({
-    description: 'Use postman to send with file, property : file',
+    description: 'Use postman to send with file, property : image',
   })
   async create(
     @UploadedFile() file: Express.Multer.File,
@@ -40,20 +40,16 @@ export class SubjectController {
     try {
       const fileName = file?.filename;
 
-      if (!fileName)
-        return ServerError({
-          res,
-          message: 'File must be a png/jpg/jpeg',
-          status: HttpStatus.BAD_REQUEST,
-        });
-      const imagesFolderPath = join(process.cwd(), 'images');
-      const fullImagePath = join(imagesFolderPath + '/' + file.filename);
-      const isFileLegit = isFileExtensionSafe(fullImagePath);
-      if (!isFileLegit) {
-        removeFile(fullImagePath);
-        return ServerError({ res });
+      if (fileName) {
+        const imagesFolderPath = join(process.cwd(), '/files/images');
+        const fullImagePath = join(imagesFolderPath + '/' + file.filename);
+        const isFileLegit = isFileExtensionSafe(fullImagePath);
+        if (!isFileLegit) {
+          removeFile(fullImagePath);
+          return ServerError({ res });
+        }
+        createSubjectDto.subject_img = file.filename;
       }
-      createSubjectDto.subject_img = file.filename;
       const subject = await this.subjectService.create(createSubjectDto);
       return res.status(HttpStatus.OK).json(
         new ResponseEntity(true, 'Create subject successfully', {
@@ -100,7 +96,7 @@ export class SubjectController {
       const fileName = file?.filename;
 
       if (fileName) {
-        const imagesFolderPath = join(process.cwd(), 'images');
+        const imagesFolderPath = join(process.cwd(), '/files/images');
         const fullImagePath = join(imagesFolderPath + '/' + file.filename);
         const isFileLegit = isFileExtensionSafe(fullImagePath);
         if (!isFileLegit) {

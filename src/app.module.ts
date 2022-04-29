@@ -33,6 +33,7 @@ import { SubjectTypeModule } from './subject/subject-type/subject-type.module';
 import { SubjectModule } from './subject/subject_list/subject.module';
 import { TimetableModule } from './timetable/timetable.module';
 import { join } from 'path';
+import { ExerciseModule } from './exercise/exercise.module';
 
 @Module({
   imports: [
@@ -94,6 +95,7 @@ import { join } from 'path';
     MarkTypeModule,
     MarkWeightModule,
     MarkDetailsModule,
+    ExerciseModule,
   ],
   controllers: [],
   providers: [],

@@ -62,6 +62,32 @@ export class StudentController {
     });
   }
 
+  @Get('/subject-class')
+  @UseGuards(AuthGuard('at_jwt'))
+  @ApiBearerAuth()
+  async studentSubjectClass(@Req() req: RequestDto, @Res() res: Response) {
+    const student = await this.studentService.studentSubjectClass(req.user.id);
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'student',
+      data: student,
+    });
+  }
+
+  @Get('/timetable')
+  @UseGuards(AuthGuard('at_jwt'))
+  @ApiBearerAuth()
+  async studentTimetable(@Req() req: RequestDto, @Res() res: Response) {
+    const student = await this.studentService.studentTimetable(req.user.id);
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'student',
+      data: student,
+    });
+  }
+
   @Get('/:id')
   async findOne(@Param('id') id: string, @Res() res: Response) {
     const student = await this.studentService.findOne(+id);
@@ -73,8 +99,8 @@ export class StudentController {
     });
   }
 
-  @Get('/class/:id')
-  findByClass() {}
+  // @Get('/class/:id')
+  // findByClass() {}
 
   @Post()
   @ApiFileImages('avatar')
