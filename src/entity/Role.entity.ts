@@ -1,11 +1,13 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { PermissionEntity } from './Permission.entity';
 import { StudentEntity } from './Student.entity';
@@ -30,4 +32,10 @@ export class RoleEntity extends BaseEntity {
   role_permissions: PermissionEntity[];
   @OneToMany((type) => StudentEntity, (std) => std.role_id)
   students: StudentEntity[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

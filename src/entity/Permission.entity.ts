@@ -1,9 +1,11 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { RoleEntity } from './Role.entity';
 
@@ -26,4 +28,10 @@ export class PermissionEntity extends BaseEntity {
   permission_desc: string;
   @ManyToMany((type) => RoleEntity, (rol) => rol.role_permissions)
   permission_roles: RoleEntity[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

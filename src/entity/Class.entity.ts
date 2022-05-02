@@ -6,6 +6,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { FacultyEntity } from './Faculty.entity';
 import { StudentEntity } from './Student.entity';
@@ -24,4 +26,10 @@ export class ClassEntity extends BaseEntity {
   class_faculty: FacultyEntity;
   @OneToMany((type) => StudentEntity, (std) => std.student_class)
   class_students: StudentEntity[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

@@ -1,11 +1,13 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { SubjectClassEntity } from './SubjectClass.entity';
 import { SubjectTypeEntity } from './SubjectType.entity';
@@ -43,4 +45,10 @@ export class SubjectEntity extends BaseEntity {
 
   @OneToMany((type) => SubjectClassEntity, (sbl) => sbl.subject)
   subject_classes: SubjectClassEntity[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

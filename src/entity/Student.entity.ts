@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { AttendanceEntity } from '../entity/Attendance';
 import { ClassEntity } from './Class.entity';
 import { MarkDetailsEntity } from './Mark_details.entity';
 import { RoleEntity } from './Role.entity';
@@ -66,4 +67,7 @@ export class StudentEntity extends BaseEntity {
 
   @OneToMany((type) => MarkDetailsEntity, (mk) => mk.student)
   student_marks: MarkDetailsEntity[];
+
+  @ManyToOne((type) => AttendanceEntity, (a) => a.attendance_students_absent)
+  student_attendance: AttendanceEntity;
 }

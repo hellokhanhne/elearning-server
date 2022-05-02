@@ -22,6 +22,7 @@ export class TimetableService {
     try {
       const subject_class = await this.subclassRep.findOne(
         createTimetableDto.classroom_subject_class_id,
+        {},
       );
       if (!subject_class) {
         return {
@@ -42,7 +43,14 @@ export class TimetableService {
   }
 
   async findAll() {
-    const timetables = await this.timetableRep.find();
+    const timetables = await this.timetableRep.find({
+      relations: [
+        'classroom_subject_class',
+        'classroom_subject_class.subject_class_students',
+        'attendance',
+        'attendance.attendance_students_absent',
+      ],
+    });
     return timetables;
   }
 

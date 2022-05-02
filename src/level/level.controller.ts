@@ -17,8 +17,8 @@ import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { LevelService } from './level.service';
 
-@ApiTags('/level')
-@Controller('level')
+@ApiTags('/api/level')
+@Controller('/api/level')
 export class LevelController {
   constructor(private readonly levelService: LevelService) {}
 

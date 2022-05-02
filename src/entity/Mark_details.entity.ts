@@ -1,10 +1,12 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { MarkWeightEntity } from './Mark_weight.entity';
 import { StudentEntity } from './Student.entity';
@@ -25,4 +27,10 @@ export class MarkDetailsEntity extends BaseEntity {
   @ManyToOne((type) => MarkWeightEntity)
   @JoinColumn({ name: 'mark_weight_id' })
   mark_weight: MarkWeightEntity;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

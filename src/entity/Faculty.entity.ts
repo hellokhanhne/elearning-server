@@ -1,9 +1,11 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { ClassEntity } from './Class.entity';
 
@@ -25,4 +27,10 @@ export class FacultyEntity extends BaseEntity {
   faculty_email: string;
   @OneToMany((type) => ClassEntity, (cl) => cl.class_faculty)
   faculty_classes: ClassEntity[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

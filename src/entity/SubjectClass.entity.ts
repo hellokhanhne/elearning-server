@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -8,6 +9,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { LecturersEntity } from './Lecturers.entity';
 import { MarkWeightEntity } from './Mark_weight.entity';
@@ -68,4 +70,10 @@ export class SubjectClassEntity extends BaseEntity {
   @ManyToOne((type) => SubjectEntity, (sb) => sb.subject_classes)
   @JoinColumn({ name: 'subject_id' })
   subject: SubjectEntity;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

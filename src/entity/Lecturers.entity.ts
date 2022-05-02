@@ -1,12 +1,14 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { LevelEntity } from './Level.entity';
 import { RoleEntity } from './Role.entity';
@@ -43,4 +45,10 @@ export class LecturersEntity extends BaseEntity {
 
   @OneToMany((type) => SubjectClassEntity, (sc) => sc.subject_class_leturer)
   lecturers_classes: SubjectClassEntity[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
