@@ -27,7 +27,7 @@ export class RoleService {
 
   async findAll(): Promise<RoleEntity[]> {
     try {
-      const role = await this.roleRep.find();
+      const role = await this.roleRep.find({ relations: ['role_permissions'] });
       return role;
     } catch (error) {
       console.log(error);

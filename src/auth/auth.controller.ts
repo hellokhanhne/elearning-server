@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
   Post,
   Req,
@@ -38,6 +39,17 @@ export class AuthController {
     return res
       .status(200)
       .json(new ResponseEntity(true, 'Login successfully !', data));
+  }
+
+  // load user
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
+  @Get('/loaduser')
+  async loadUser(@Req() req: RequestDto, @Res() res: Response) {
+    const data = await this.authService.loadUser(req.user.email);
+    return res
+      .status(HttpStatus.OK)
+      .json(new ResponseEntity(true, 'Get info user successfully !', data));
   }
 
   // logout

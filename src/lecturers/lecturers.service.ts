@@ -60,6 +60,14 @@ export class LecturersService {
     return lecturer;
   }
 
+  async profile(leturer_email: string | any) {
+    const user = await this.lecRep.findOne(
+      { leturer_email },
+      { relations: ['role_id'] },
+    );
+    return user;
+  }
+
   async update(
     id: number,
     updateLecturerDto: UpdateLecturerDto,

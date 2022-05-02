@@ -7,12 +7,16 @@ import {
   Param,
   Post,
   Put,
+  Req,
   Res,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { join } from 'path';
+import { RequestDto } from 'src/auth/dto/request.dto';
 import { ApiFileImages } from 'src/decorators/api-file.decorator';
 import { isFileExtensionSafe, removeFile } from 'src/utils/ImageStorage';
 import {
@@ -63,7 +67,6 @@ export class LecturersController {
         return ServerError({ res, message: data.error, status: data.status });
       }
       return CreatePartterRes({ res, success: true, type: 'lecturer', data });
-      // console.log(createLecturerDto);
     } catch (error) {
       return ServerError({ res });
     }
@@ -77,6 +80,22 @@ export class LecturersController {
       type: 'lecturers',
       success: true,
       data: lecturers,
+    });
+  }
+
+  @UseGuards(AuthGuard('at_jwt'))
+  @ApiBearerAuth()
+  @Get('/me')
+  async profile(@Req() req: RequestDto, @Res() res: Response) {
+    const lecturer = await this.lecturersService.profile(req.user.email);
+    if (!lecturer) {
+      return GetDataPartternRes({ res, success: false, type: 'profile' });
+    }
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'profile',
+      data: lecturer,
     });
   }
 
