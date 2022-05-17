@@ -37,6 +37,13 @@ export class NewsMainService {
 
   async findAll() {
     const news = await this.newsRep.find({ relations: ['news_category'] });
+    // for (let n of news) {
+    //   n.news_content = n.news_content.replace(
+    //     'http://localhost:5000',
+    //     'https://nguyenngockhanh.xyz',
+    //   );
+    //   await n.save();
+    // }
     return news;
   }
 
