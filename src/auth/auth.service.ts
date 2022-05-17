@@ -102,7 +102,7 @@ export class AuthService {
   // get access token from refresh_token
   async refreshToken(payload: JwtPayload): Promise<Object> {
     const access_token = await this.jwtService.signAsync(payload, {
-      expiresIn: '15m',
+      expiresIn: '1d',
       secret: this.config.get<string>('ACCESS_TOKEN'),
     });
     return { access_token };

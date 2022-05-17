@@ -79,12 +79,12 @@ export class StudentController {
   @UseGuards(AuthGuard('at_jwt'))
   @ApiBearerAuth()
   async studentTimetable(@Req() req: RequestDto, @Res() res: Response) {
-    const student = await this.studentService.studentTimetable(req.user.id);
+    const data = await this.studentService.studentTimetable(req.user.id);
     return GetDataPartternRes({
       res,
       success: true,
       type: 'student',
-      data: student,
+      data: data,
     });
   }
 

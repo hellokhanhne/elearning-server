@@ -47,6 +47,7 @@
     "googleapis": "^95.0.0",
     "ioredis": "^4.28.5",
     "lodash": "^4.17.21",
+    "moment": "^2.29.3",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "pg": "^8.7.3",

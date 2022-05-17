@@ -36,7 +36,7 @@ export class NewsMainService {
   }
 
   async findAll() {
-    const news = await this.newsRep.find();
+    const news = await this.newsRep.find({ relations: ['news_category'] });
     return news;
   }
 
