@@ -37,7 +37,7 @@ export class AuthService {
         {
           student_email: payload.getPayload().email,
         },
-        { relations: ['role_id'] },
+        { relations: ['role'] },
       );
 
       let lecturer: LecturersEntity;
@@ -47,7 +47,7 @@ export class AuthService {
           {
             leturer_email: payload.getPayload().email,
           },
-          { relations: ['role_id'] },
+          { relations: ['role'] },
         );
 
         if (!lecturer) {
@@ -80,7 +80,7 @@ export class AuthService {
       {
         student_email: email,
       },
-      { relations: ['role_id'] },
+      { relations: ['role'] },
     );
     let lecturer: LecturersEntity;
     if (!student) {
@@ -88,7 +88,7 @@ export class AuthService {
         {
           leturer_email: email,
         },
-        { relations: ['role_id'] },
+        { relations: ['role'] },
       );
     }
     const user = getUserInfo(student, lecturer);
@@ -140,7 +140,7 @@ const getUserInfo = (
     ? student.student_lastName
     : lecturer.leturer_lastName;
   const phone = student ? student.student_mobile : lecturer.leturer_phone;
-  const role = student ? student.role_id : lecturer.role_id;
+  const role = student ? student.role : lecturer.role_id;
   return {
     id,
     email,

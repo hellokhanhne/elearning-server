@@ -37,9 +37,11 @@ export class StudentService {
     student.student_fisrtName = createStudentDto.student_fisrtName;
     student.student_lastName = createStudentDto.student_lastName;
     student.student_mobile = createStudentDto.student_mobile;
-    student.role_id = role;
+    student.role = role;
     student.student_class = _class;
-    await this.studentRepository.save(student);
+    await student.save();
+    // console.log(student);
+    // await this.studentRepository.save(student);
     return student;
   }
 
@@ -49,7 +51,10 @@ export class StudentService {
   }
 
   async findOne(id: number) {
-    const student = await this.studentRepository.findOne(id);
+    const student = await this.studentRepository.findOne(id, {
+      relations: ['role', 'student_class'],
+    });
+
     return student;
   }
 
@@ -114,7 +119,7 @@ export class StudentService {
     student.student_fisrtName = updateStudentDto.student_fisrtName;
     student.student_lastName = updateStudentDto.student_lastName;
     student.student_mobile = updateStudentDto.student_mobile;
-    student.role_id = role;
+    student.role = role;
     student.student_class = _class;
     if (updateStudentDto.student_avatar) {
       student.student_avatar = updateStudentDto.student_avatar;
@@ -126,6 +131,7 @@ export class StudentService {
   async remove(id: number) {
     try {
       const student = await this.studentRepository.findOne(id);
+
       await this.studentRepository.remove(student);
       return true;
     } catch (error) {

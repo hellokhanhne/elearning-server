@@ -60,7 +60,7 @@ export class StudentEntity extends BaseEntity {
   student_class: ClassEntity;
   @ManyToOne((type) => RoleEntity)
   @JoinColumn({ name: 'student_role' })
-  role_id: RoleEntity;
+  role: RoleEntity;
 
   @ManyToMany((type) => SubjectClassEntity, (std) => std.subject_class_students)
   student_subject_classes: SubjectClassEntity[];

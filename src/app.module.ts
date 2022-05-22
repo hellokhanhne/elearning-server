@@ -40,6 +40,7 @@ import { SubjectModule } from './subject/subject_list/subject.module';
 import { TimetableModule } from './timetable/timetable.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { UploadModule } from './upload/upload.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -109,6 +110,7 @@ import { UploadModule } from './upload/upload.module';
     NewsMainModule,
     AttendanceModule,
     UploadModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [],

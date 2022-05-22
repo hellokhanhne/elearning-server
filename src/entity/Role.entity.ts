@@ -30,7 +30,7 @@ export class RoleEntity extends BaseEntity {
     name: 'role_permission',
   })
   role_permissions: PermissionEntity[];
-  @OneToMany((type) => StudentEntity, (std) => std.role_id)
+  @OneToMany((type) => StudentEntity, (std) => std.role)
   students: StudentEntity[];
 
   @CreateDateColumn()
