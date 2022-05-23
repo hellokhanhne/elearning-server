@@ -108,7 +108,7 @@ import { ChatModule } from './chat/chat.module';
 
     NewsCategoryModule,
     NewsMainModule,
-    AttendanceModule,
+    AttendanceModule, //
     UploadModule,
     ChatModule,
   ],
