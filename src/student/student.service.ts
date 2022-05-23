@@ -7,6 +7,7 @@ import { RoleService } from 'src/role/role.service';
 import { Repository } from 'typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import * as moment from 'moment-timezone';
 
 @Injectable()
 export class StudentService {
@@ -74,6 +75,7 @@ export class StudentService {
 
   async studentTimetable(idStudent: number) {
     const data = [];
+
     const student = await this.studentRepository.findOne(idStudent, {
       relations: [
         'student_subject_classes',
@@ -103,7 +105,50 @@ export class StudentService {
         });
       }
     });
-    return data;
+    return {
+      Monday: data.filter((d) => d.day_of_week === '2'),
+      Tuesday: data.filter((d) => d.day_of_week === '3'),
+      Wednesday: data.filter((d) => d.day_of_week === '4'),
+      Thursday: data.filter((d) => d.day_of_week === '5'),
+      Friday: data.filter((d) => d.day_of_week === '6'),
+      Saturday: data.filter((d) => d.day_of_week === '7'),
+      Sunday: data.filter((d) => d.day_of_week === '8'),
+    };
+  }
+
+  async studentTimetableNow(idStudent: number) {
+    const data = [];
+
+    const student = await this.studentRepository.findOne(idStudent, {
+      relations: [
+        'student_subject_classes',
+        'student_subject_classes.subject_class_timetable',
+      ],
+    });
+    student.student_subject_classes.forEach((s) => {
+      if (s.subject_class_timetable.length > 0) {
+        s.subject_class_timetable.forEach((t) => {
+          const {
+            subject_class_name,
+            subject_class_short_name,
+            school_year,
+            semester,
+            date_start,
+            date_end,
+          } = s;
+          data.push({
+            ...t,
+            subject_class_name,
+            subject_class_short_name,
+            school_year,
+            semester,
+            date_start,
+            date_end,
+          });
+        });
+      }
+    });
+    return data.filter((d) => d.day_of_week === moment().weekday());
   }
 
   async update(id: number, updateStudentDto: UpdateStudentDto) {

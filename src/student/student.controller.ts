@@ -78,12 +78,30 @@ export class StudentController {
   @Get('/timetable')
   @UseGuards(AuthGuard('at_jwt'))
   @ApiBearerAuth()
+  @ApiOperation({
+    description: 'Get all timetable of student',
+  })
   async studentTimetable(@Req() req: RequestDto, @Res() res: Response) {
     const data = await this.studentService.studentTimetable(req.user.id);
     return GetDataPartternRes({
       res,
       success: true,
-      type: 'student',
+      type: 'student timetables',
+      data: data,
+    });
+  }
+  @UseGuards(AuthGuard('at_jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({
+    description: 'Get now timetable of student',
+  })
+  @Get('/timetable/now')
+  async studentTimetableNow(@Req() req: RequestDto, @Res() res: Response) {
+    const data = await this.studentService.studentTimetableNow(req.user.id);
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'student timetable',
       data: data,
     });
   }
