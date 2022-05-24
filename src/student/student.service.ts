@@ -127,8 +127,10 @@ export class StudentService {
         'student_subject_classes',
         'student_subject_classes.subject_class_timetable',
         'student_subject_classes.subject_class_leturer',
+        'student_subject_classes.subject_class_leturer.leturer_level',
       ],
     });
+
     student.student_subject_classes.forEach((s) => {
       if (s.subject_class_timetable.length > 0) {
         s.subject_class_timetable.forEach((t) => {
