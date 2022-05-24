@@ -79,9 +79,11 @@ export class StudentService {
     const student = await this.studentRepository.findOne(idStudent, {
       relations: [
         'student_subject_classes',
+        'student_subject_classes.subject_class_leturer',
         'student_subject_classes.subject_class_timetable',
       ],
     });
+
     student.student_subject_classes.forEach((s) => {
       if (s.subject_class_timetable.length > 0) {
         s.subject_class_timetable.forEach((t) => {
@@ -101,6 +103,7 @@ export class StudentService {
             semester,
             date_start,
             date_end,
+            lecturer: s.subject_class_leturer,
           });
         });
       }
@@ -123,6 +126,7 @@ export class StudentService {
       relations: [
         'student_subject_classes',
         'student_subject_classes.subject_class_timetable',
+        'student_subject_classes.subject_class_leturer',
       ],
     });
     student.student_subject_classes.forEach((s) => {
@@ -144,6 +148,7 @@ export class StudentService {
             semester,
             date_start,
             date_end,
+            lecturer: s.subject_class_leturer,
           });
         });
       }
