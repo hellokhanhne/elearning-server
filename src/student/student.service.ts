@@ -156,11 +156,11 @@ export class StudentService {
       }
     });
 
-    const d = new Date(moment.utc(Date.now()).tz('Asia/Saigon').toString());
-    let day = d.getDay();
-    console.log(d);
-    console.log(day);
-    return data.filter((d) => d.day_of_week === (day + 1).toString());
+    return data.filter(
+      (d) =>
+        d.day_of_week ===
+        (moment.utc(Date.now()).tz('Asia/Saigon').day() + 1).toString(),
+    );
   }
 
   async update(id: number, updateStudentDto: UpdateStudentDto) {
