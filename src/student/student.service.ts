@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment-timezone';
 import { ClassEntity } from 'src/entity/Class.entity';
 import { StudentEntity } from 'src/entity/Student.entity';
 import { SubjectClassEntity } from 'src/entity/SubjectClass.entity';
@@ -7,7 +8,6 @@ import { RoleService } from 'src/role/role.service';
 import { Repository } from 'typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
-import * as moment from 'moment-timezone';
 
 @Injectable()
 export class StudentService {
@@ -148,7 +148,11 @@ export class StudentService {
         });
       }
     });
-    return data.filter((d) => d.day_of_week === moment().weekday());
+
+    const d = new Date(moment.utc(Date.now()).tz('Asia/Saigon').toString());
+    let day = d.getDay();
+
+    return data.filter((d) => d.day_of_week === (day + 1).toString());
   }
 
   async update(id: number, updateStudentDto: UpdateStudentDto) {
