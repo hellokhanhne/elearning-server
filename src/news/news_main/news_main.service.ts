@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment-timezone';
 import { NewsEntity } from 'src/entity/News';
 import { NewsCategoryEntity } from 'src/entity/News_category';
 import { Repository } from 'typeorm';
@@ -50,7 +51,10 @@ export class NewsMainService {
     //   await n.save();
     // }
     return {
-      news: data[0],
+      news: data[0].map((n) => ({
+        ...n,
+        created_at: moment(n.created_at.toISOString()).format('DD/MM/YYYY'),
+      })),
 
       total: data[1],
     };
