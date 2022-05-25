@@ -120,6 +120,7 @@ export class StudentController {
 
     @Res() res: Response,
   ) {
+    console.log(start, end);
     const data = await this.studentService.getTimetableByDate(
       req.user.id,
       start,
