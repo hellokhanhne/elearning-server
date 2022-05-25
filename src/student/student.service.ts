@@ -101,7 +101,7 @@ export class StudentService {
         toDay.seconds(),
         toDay.milliseconds(),
       );
-      d.setDate(d.getDate() - d.getDay() + idx);
+      d.setDate(d.getDate() - d.getDay() + idx + 1);
       const lcds = d.toLocaleDateString().split('/');
       return `${lcds[2]}-${lcds[0]}-${lcds[1]}`;
     });
