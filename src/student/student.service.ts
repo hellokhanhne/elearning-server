@@ -87,8 +87,6 @@ export class StudentService {
   }
 
   async studentTimetable(idStudent: number) {
-    const data = [];
-
     const toDay = moment.utc(Date.now()).tz('Asia/Saigon');
 
     const dates = Array.from(Array(7).keys()).map((idx) => {
@@ -106,49 +104,7 @@ export class StudentService {
       return `${lcds[2]}-${lcds[0]}-${lcds[1]}`;
     });
 
-    console.log(dates);
-
-    const student = await this.studentRepository.findOne(idStudent, {
-      relations: [
-        'student_subject_classes',
-        'student_subject_classes.subject_class_leturer',
-        'student_subject_classes.subject_class_timetable',
-      ],
-    });
-
-    student.student_subject_classes.forEach((s) => {
-      if (s.subject_class_timetable.length > 0) {
-        s.subject_class_timetable.forEach((t) => {
-          const {
-            subject_class_name,
-            subject_class_short_name,
-            school_year,
-            // semester,
-            // date_start,
-            // date_end,
-          } = s;
-
-          const [lesstionS, lesstionE] = t.lession.split('-');
-
-          data.push({
-            ...t,
-            subject_class_name,
-            subject_class_short_name,
-            school_year,
-            // semester,
-            // date_start,
-            // date_end,
-            lecturer: s.subject_class_leturer,
-            time_start: `${dates[Number(t.day_of_week - 2)]} ${
-              timeLesstion[lesstionS]
-            }`,
-            time_end: `${dates[Number(t.day_of_week - 2)]} ${
-              timeLesstion[Number(lesstionE) + 1]
-            }`,
-          });
-        });
-      }
-    });
+    const data = await this.getTimeTable(idStudent, dates);
     return data;
     // return {
     //   Monday: data.filter((d) => d.day_of_week === '2'),
@@ -159,6 +115,48 @@ export class StudentService {
     //   Saturday: data.filter((d) => d.day_of_week === '7'),
     //   Sunday: data.filter((d) => d.day_of_week === '8'),
     // };
+  }
+
+  async getTimetableByDate(idStudent: number, start: string, end: string) {
+    const dateStartQ = new Date(start);
+    const dateEndQ = new Date(end);
+
+    const loopEnd = moment([
+      dateEndQ.getFullYear(),
+      dateEndQ.getMonth(),
+      dateEndQ.getDate(),
+    ]).diff(
+      moment([
+        dateStartQ.getFullYear(),
+        dateStartQ.getMonth(),
+        dateStartQ.getDate(),
+      ]),
+      'days',
+    );
+
+    const _dates = Array.from(Array(loopEnd + 1).keys()).map((index) => {
+      const d = moment([
+        dateStartQ.getFullYear(),
+        dateStartQ.getMonth(),
+        dateStartQ.getDate(),
+      ]).add(index, 'days');
+      return {
+        [d.isoWeekday()]: `${d.year()}-${d.month() + 1}-${d.date()}`,
+      };
+    });
+
+    const dates = {};
+
+    _dates.forEach((d) => {
+      let [key, value] = Object.entries(d)[0];
+      dates[key] = value;
+    });
+
+    // console.log(dates);
+
+    const data = await this.getTimeTable(idStudent, dates);
+    // console.log(data);
+    return data;
   }
 
   async studentTimetableNow(idStudent: number) {
@@ -237,5 +235,72 @@ export class StudentService {
       console.log(error);
       return false;
     }
+  }
+
+  async getTimeTable(idStudent: number, dates: any) {
+    const data = [];
+    const student = await this.studentRepository.findOne(idStudent, {
+      relations: [
+        'student_subject_classes',
+        'student_subject_classes.subject_class_leturer',
+        'student_subject_classes.subject_class_timetable',
+      ],
+    });
+
+    student.student_subject_classes.forEach((s) => {
+      if (s.subject_class_timetable.length > 0) {
+        s.subject_class_timetable.forEach((t) => {
+          const {
+            subject_class_name,
+            subject_class_short_name,
+            school_year,
+            // semester,
+            // date_start,
+            // date_end,
+          } = s;
+
+          const [lesstionS, lesstionE] = t.lession.split('-');
+
+          if (dates.isArray) {
+            data.push({
+              ...t,
+              subject_class_name,
+              subject_class_short_name,
+              school_year,
+              // semester,
+              // date_start,
+              // date_end,
+              lecturer: s.subject_class_leturer,
+              time_start: `${dates[Number(t.day_of_week - 2)]} ${
+                timeLesstion[lesstionS]
+              }`,
+              time_end: `${dates[Number(t.day_of_week - 2)]} ${
+                timeLesstion[Number(lesstionE) + 1]
+              }`,
+            });
+          } else {
+            if (dates[Number(t.day_of_week - 1)]) {
+              data.push({
+                ...t,
+                subject_class_name,
+                subject_class_short_name,
+                school_year,
+                // semester,
+                // date_start,
+                // date_end,
+                lecturer: s.subject_class_leturer,
+                time_start: `${dates[Number(t.day_of_week - 1)]} ${
+                  timeLesstion[lesstionS]
+                }`,
+                time_end: `${dates[Number(t.day_of_week - 1)]} ${
+                  timeLesstion[Number(lesstionE) + 1]
+                }`,
+              });
+            }
+          }
+        });
+      }
+    });
+    return data;
   }
 }

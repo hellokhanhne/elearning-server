@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UploadedFile,
@@ -98,6 +99,32 @@ export class StudentController {
   @Get('/timetable/now')
   async studentTimetableNow(@Req() req: RequestDto, @Res() res: Response) {
     const data = await this.studentService.studentTimetableNow(req.user.id);
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'student timetable',
+      data: data,
+    });
+  }
+
+  @UseGuards(AuthGuard('at_jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({
+    description: 'Get now timetable of student',
+  })
+  @Get('/timetable/bydate')
+  async studentTimetableByDate(
+    @Req() req: RequestDto,
+    @Query('start') start: string,
+    @Query('end') end: string,
+
+    @Res() res: Response,
+  ) {
+    const data = await this.studentService.getTimetableByDate(
+      req.user.id,
+      start,
+      end,
+    );
     return GetDataPartternRes({
       res,
       success: true,
