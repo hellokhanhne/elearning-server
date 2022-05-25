@@ -9,6 +9,19 @@ import { Repository } from 'typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 
+const timeLesstion = {
+  1: '07:30:00',
+  2: '08:30:00',
+  3: '09:30:00',
+  4: '10:30:00',
+  5: '11:30:00',
+  6: '13:00:00',
+  7: '14:00:00',
+  8: '15:00:00',
+  9: '16:00:00',
+  10: '17:00:00',
+};
+
 @Injectable()
 export class StudentService {
   constructor(
@@ -76,6 +89,25 @@ export class StudentService {
   async studentTimetable(idStudent: number) {
     const data = [];
 
+    const toDay = moment.utc(Date.now()).tz('Asia/Saigon');
+
+    const dates = Array.from(Array(7).keys()).map((idx) => {
+      const d = new Date(
+        toDay.year(),
+        toDay.month(),
+        toDay.date(),
+        toDay.hours(),
+        toDay.minutes(),
+        toDay.seconds(),
+        toDay.milliseconds(),
+      );
+      d.setDate(d.getDate() - d.getDay() + idx);
+      const lcds = d.toLocaleDateString().split('/');
+      return `${lcds[2]}-${lcds[0]}-${lcds[1]}`;
+    });
+
+    console.log(dates);
+
     const student = await this.studentRepository.findOne(idStudent, {
       relations: [
         'student_subject_classes',
@@ -95,6 +127,9 @@ export class StudentService {
             date_start,
             date_end,
           } = s;
+
+          const [lesstionS, lesstionE] = t.lession.split('-');
+
           data.push({
             ...t,
             subject_class_name,
@@ -104,6 +139,12 @@ export class StudentService {
             date_start,
             date_end,
             lecturer: s.subject_class_leturer,
+            time_start: `${dates[Number(t.day_of_week - 2)]} ${
+              timeLesstion[lesstionS]
+            }`,
+            time_end: `${dates[Number(t.day_of_week - 2)]} ${
+              timeLesstion[lesstionE]
+            }`,
           });
         });
       }
