@@ -238,6 +238,7 @@ export class StudentService {
   }
 
   async getTimeTable(idStudent: number, dates: any) {
+    const isArray = Array.isArray(dates);
     const data = [];
     const student = await this.studentRepository.findOne(idStudent, {
       relations: [
@@ -261,7 +262,7 @@ export class StudentService {
 
           const [lesstionS, lesstionE] = t.lession.split('-');
 
-          if (dates.isArray) {
+          if (isArray) {
             data.push({
               ...t,
               subject_class_name,
