@@ -111,7 +111,7 @@ export class StudentService {
     const student = await this.studentRepository.findOne(idStudent, {
       relations: [
         'student_subject_classes',
-        'student_subject_classes.subject_class_leturer',
+        // 'student_subject_classes.subject_class_leturer',
         'student_subject_classes.subject_class_timetable',
       ],
     });
@@ -123,9 +123,9 @@ export class StudentService {
             subject_class_name,
             subject_class_short_name,
             school_year,
-            semester,
-            date_start,
-            date_end,
+            // semester,
+            // date_start,
+            // date_end,
           } = s;
 
           const [lesstionS, lesstionE] = t.lession.split('-');
@@ -135,10 +135,10 @@ export class StudentService {
             subject_class_name,
             subject_class_short_name,
             school_year,
-            semester,
-            date_start,
-            date_end,
-            lecturer: s.subject_class_leturer,
+            // semester,
+            // date_start,
+            // date_end,
+            // lecturer: s.subject_class_leturer,
             time_start: `${dates[Number(t.day_of_week - 2)]} ${
               timeLesstion[lesstionS]
             }`,
@@ -149,15 +149,16 @@ export class StudentService {
         });
       }
     });
-    return {
-      Monday: data.filter((d) => d.day_of_week === '2'),
-      Tuesday: data.filter((d) => d.day_of_week === '3'),
-      Wednesday: data.filter((d) => d.day_of_week === '4'),
-      Thursday: data.filter((d) => d.day_of_week === '5'),
-      Friday: data.filter((d) => d.day_of_week === '6'),
-      Saturday: data.filter((d) => d.day_of_week === '7'),
-      Sunday: data.filter((d) => d.day_of_week === '8'),
-    };
+    return data;
+    // return {
+    //   Monday: data.filter((d) => d.day_of_week === '2'),
+    //   Tuesday: data.filter((d) => d.day_of_week === '3'),
+    //   Wednesday: data.filter((d) => d.day_of_week === '4'),
+    //   Thursday: data.filter((d) => d.day_of_week === '5'),
+    //   Friday: data.filter((d) => d.day_of_week === '6'),
+    //   Saturday: data.filter((d) => d.day_of_week === '7'),
+    //   Sunday: data.filter((d) => d.day_of_week === '8'),
+    // };
   }
 
   async studentTimetableNow(idStudent: number) {
