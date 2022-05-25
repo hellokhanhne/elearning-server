@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Res,
   UploadedFile,
 } from '@nestjs/common';
@@ -75,8 +76,12 @@ export class NewsMainController {
   }
 
   @Get()
-  async findAll(@Res() res: Response) {
-    const news = await this.newsMainService.findAll();
+  async findAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+    @Res() res: Response,
+  ) {
+    const news = await this.newsMainService.findAll(page, limit);
     return GetDataPartternRes({ res, success: true, type: 'news', data: news });
   }
 

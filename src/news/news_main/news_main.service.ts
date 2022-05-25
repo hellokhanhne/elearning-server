@@ -35,8 +35,13 @@ export class NewsMainService {
     } catch (error) {}
   }
 
-  async findAll() {
-    const news = await this.newsRep.find({ relations: ['news_category'] });
+  async findAll(page: number = 1, limit: number = 5) {
+    const skip = (page - 1) * limit;
+    const data = await this.newsRep.findAndCount({
+      relations: ['news_category'],
+      take: limit,
+      skip,
+    });
     // for (let n of news) {
     //   n.news_content = n.news_content.replace(
     //     'http://localhost:5000',
@@ -44,7 +49,11 @@ export class NewsMainService {
     //   );
     //   await n.save();
     // }
-    return news;
+    return {
+      news: data[0],
+
+      total: data[1],
+    };
   }
 
   async findOne(id: number) {
