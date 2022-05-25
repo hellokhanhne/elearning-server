@@ -111,7 +111,7 @@ export class StudentService {
     const student = await this.studentRepository.findOne(idStudent, {
       relations: [
         'student_subject_classes',
-        // 'student_subject_classes.subject_class_leturer',
+        'student_subject_classes.subject_class_leturer',
         'student_subject_classes.subject_class_timetable',
       ],
     });
@@ -138,7 +138,7 @@ export class StudentService {
             // semester,
             // date_start,
             // date_end,
-            // lecturer: s.subject_class_leturer,
+            lecturer: s.subject_class_leturer,
             time_start: `${dates[Number(t.day_of_week - 2)]} ${
               timeLesstion[lesstionS]
             }`,
