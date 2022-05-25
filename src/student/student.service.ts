@@ -143,7 +143,7 @@ export class StudentService {
               timeLesstion[lesstionS]
             }`,
             time_end: `${dates[Number(t.day_of_week - 2)]} ${
-              timeLesstion[lesstionE + 1]
+              timeLesstion[Number(lesstionE) + 1]
             }`,
           });
         });
