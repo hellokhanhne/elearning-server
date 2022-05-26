@@ -7,10 +7,11 @@ import {
   Param,
   Post,
   Put,
+  Request,
   Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
+import { Request as ExpressReq, Response, Router } from 'express';
 import { ResponseEntity } from 'src/utils/ResponseEntity';
 import { DeletePartternRes, ServerError } from 'src/utils/ResponseParttern';
 import { CreatePermissionDto } from './dto/create-permission.dto';
@@ -31,24 +32,28 @@ export class PermissionController {
       const permission = await this.permissionService.create(
         createPermissionDto,
       );
-      return res.status(HttpStatus.OK).json(
-        new ResponseEntity(true, 'Create permission successfully !', {
-          data: permission,
-        }),
-      );
+      return res
+        .status(HttpStatus.OK)
+        .json(
+          new ResponseEntity(
+            true,
+            'Create permission successfully !',
+            permission,
+          ),
+        );
     } catch (error) {
       return ServerError({ res });
     }
   }
 
   @Get()
-  async findAll(@Res() res: Response) {
+  async findAll(@Request() req: ExpressReq, @Res() res: Response) {
     const permissions = await this.permissionService.findAll();
-    return res.status(HttpStatus.OK).json(
-      new ResponseEntity(true, 'Get permissions successfully !', {
-        data: permissions,
-      }),
-    );
+    return res
+      .status(HttpStatus.OK)
+      .json(
+        new ResponseEntity(true, 'Get permissions successfully !', permissions),
+      );
   }
 
   async findByArray(permissionsArr: number[]) {
@@ -58,11 +63,11 @@ export class PermissionController {
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() res: Response) {
     const permission = await this.permissionService.findOne(+id);
-    return res.status(HttpStatus.OK).json(
-      new ResponseEntity(true, 'Get permission successfully !', {
-        data: permission,
-      }),
-    );
+    return res
+      .status(HttpStatus.OK)
+      .json(
+        new ResponseEntity(true, 'Get permission successfully !', permission),
+      );
   }
 
   @Put(':id')
@@ -76,11 +81,15 @@ export class PermissionController {
         +id,
         updatePermissionDto,
       );
-      return res.status(HttpStatus.OK).json(
-        new ResponseEntity(true, 'Update permission successfully !', {
-          data: permission,
-        }),
-      );
+      return res
+        .status(HttpStatus.OK)
+        .json(
+          new ResponseEntity(
+            true,
+            'Update permission successfully !',
+            permission,
+          ),
+        );
     } catch (error) {
       return ServerError({ res });
     }

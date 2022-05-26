@@ -10,10 +10,13 @@ import {
   Query,
   Res,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { join } from 'path';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 import { ApiFileImages } from 'src/decorators/api-file.decorator';
 import { isFileExtensionSafe, removeFile } from 'src/utils/ImageStorage';
 import {
@@ -27,6 +30,9 @@ import { UpdateNewsMainDto } from './dto/update-news_main.dto';
 import { NewsMainService } from './news_main.service';
 import { createNewsSchema } from './schema/createNews.schema';
 
+@UseGuards(RoleGuard())
+@UseGuards(AuthGuard('at_jwt'))
+@ApiBearerAuth()
 @ApiTags('/api/news')
 @Controller('/api/news')
 export class NewsMainController {

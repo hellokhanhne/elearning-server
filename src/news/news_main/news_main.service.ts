@@ -37,6 +37,9 @@ export class NewsMainService {
   }
 
   async findAll(page: number = 1, limit: number = 5) {
+    if (page == -1) {
+      return await this.newsRep.find({ relations: ['news_category'] });
+    }
     const skip = (page - 1) * limit;
     const data = await this.newsRep.findAndCount({
       relations: ['news_category'],

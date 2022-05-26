@@ -16,9 +16,18 @@ export const RoleGuard = (): Type<CanActivate> => {
         relations: ['role_permissions'],
       });
 
-      return role.role_permissions
-        .map((per) => per.permission_url)
-        .includes(request.path);
+      let isNext = false;
+
+      for (let per of role.role_permissions) {
+        if (
+          per.permission_url === request.route.path &&
+          per.permission_desc.toUpperCase() === request.method.toUpperCase()
+        ) {
+          return (isNext = true);
+        }
+      }
+
+      return isNext;
     }
   }
   return mixin(RoleGuardMixin);

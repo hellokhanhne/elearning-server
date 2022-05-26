@@ -9,14 +9,18 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiNotImplementedResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Response } from 'express';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 import { ResponseEntity } from 'src/utils/ResponseEntity';
 import { DeletePartternRes, ServerError } from 'src/utils/ResponseParttern';
 import { CreateRoleDto } from './dto/create-role.dto';
@@ -24,6 +28,9 @@ import { UpdateRolePermission } from './dto/update-role-permission.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleService } from './role.service';
 
+@UseGuards(RoleGuard())
+@UseGuards(AuthGuard('at_jwt'))
+@ApiBearerAuth()
 @ApiTags('/api/role')
 @Controller('/api/role')
 export class RoleController {

@@ -36,7 +36,9 @@ export class RoleService {
 
   async findOne(id: number): Promise<RoleEntity> {
     try {
-      const role = await this.roleRep.findOne(id);
+      const role = await this.roleRep.findOne(id, {
+        relations: ['role_permissions'],
+      });
       return role;
     } catch (error) {
       console.log(error);

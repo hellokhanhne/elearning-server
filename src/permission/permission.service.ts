@@ -23,7 +23,7 @@ export class PermissionService {
     return permission;
   }
 
-  async findAll(): Promise<PermissionEntity[]> {
+  async findAll() {
     const permissions = await this.permissionRep.find();
     return permissions;
   }
@@ -38,6 +38,7 @@ export class PermissionService {
 
   async findOne(id: number): Promise<PermissionEntity> {
     const permission = await this.permissionRep.findOne(id);
+    console.log(permission);
     return permission;
   }
 

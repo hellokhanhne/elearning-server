@@ -18,6 +18,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { join } from 'path';
 import { RequestDto } from 'src/auth/dto/request.dto';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 import { ApiFileImages } from 'src/decorators/api-file.decorator';
 import { isFileExtensionSafe, removeFile } from 'src/utils/ImageStorage';
 import {
@@ -33,11 +34,13 @@ import { StudentService } from './student.service';
 
 @ApiTags('/api/student')
 @Controller('/api/student')
+@UseGuards(RoleGuard())
+@UseGuards(AuthGuard('at_jwt'))
+@ApiBearerAuth()
 // @UseGuards(RoleGuard())
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
-  @UseGuards(AuthGuard('at_jwt'))
-  @ApiBearerAuth()
+
   @Get('/me')
   async profile(@Req() req: RequestDto, @Res() res: Response) {
     const student = await this.studentService.profile(req.user.email);
@@ -64,8 +67,6 @@ export class StudentController {
   }
 
   @Get('/subject-class')
-  @UseGuards(AuthGuard('at_jwt'))
-  @ApiBearerAuth()
   async studentSubjectClass(@Req() req: RequestDto, @Res() res: Response) {
     const student = await this.studentService.studentSubjectClass(req.user.id);
     return GetDataPartternRes({
@@ -77,8 +78,6 @@ export class StudentController {
   }
 
   @Get('/timetable')
-  @UseGuards(AuthGuard('at_jwt'))
-  @ApiBearerAuth()
   @ApiOperation({
     description: 'Get all timetable of student',
   })
@@ -91,8 +90,7 @@ export class StudentController {
       data: data,
     });
   }
-  @UseGuards(AuthGuard('at_jwt'))
-  @ApiBearerAuth()
+
   @ApiOperation({
     description: 'Get now timetable of student',
   })
@@ -107,8 +105,6 @@ export class StudentController {
     });
   }
 
-  @UseGuards(AuthGuard('at_jwt'))
-  @ApiBearerAuth()
   @ApiOperation({
     description: 'Get now timetable of student',
   })
