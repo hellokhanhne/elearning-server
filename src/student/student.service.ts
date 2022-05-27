@@ -120,26 +120,33 @@ export class StudentService {
   async getTimetableByDate(idStudent: number, start: string, end: string) {
     const dateStartQ = new Date(start);
     const dateEndQ = new Date(end);
-
-    const loopEnd = moment([
+    const momentDateStart = moment([
+      dateStartQ.getFullYear(),
+      dateStartQ.getMonth(),
+      dateStartQ.getDate(),
+    ]);
+    const momentDateEnd = moment([
       dateEndQ.getFullYear(),
       dateEndQ.getMonth(),
       dateEndQ.getDate(),
-    ]).diff(
-      moment([
-        dateStartQ.getFullYear(),
-        dateStartQ.getMonth(),
-        dateStartQ.getDate(),
-      ]),
-      'days',
-    );
+    ]);
+    const loopEnd = momentDateEnd.diff(momentDateStart, 'days');
 
-    const _dates = Array.from(Array(loopEnd + 1).keys()).map((index) => {
+    // console.log(
+    //   momentDateStart.year(),
+    //   momentDateStart.month(),
+    //   momentDateStart.date(),
+    // );
+
+    const dateSubtract = momentDateStart.subtract(2, 'days');
+
+    const _dates = Array.from(Array(loopEnd + 3).keys()).map((index) => {
       const d = moment([
-        dateStartQ.getFullYear(),
-        dateStartQ.getMonth(),
-        dateStartQ.getDate(),
+        dateSubtract.year(),
+        dateSubtract.month(),
+        dateSubtract.date(),
       ]).add(index, 'days');
+
       return {
         [d.isoWeekday()]: `${d.year()}-${d.month() + 1}-${d.date()}`,
       };

@@ -114,7 +114,7 @@ import { AssignmentEntity } from './entity/Assignment.entity';
     AttendanceModule, //
     UploadModule,
     ChatModule,
-    AssignmentModule,
+    // AssignmentModule,
   ],
   controllers: [],
   providers: [],
