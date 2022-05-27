@@ -8,9 +8,11 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { AssignmentEntity } from './Assignment.entity';
 import { LecturersEntity } from './Lecturers.entity';
 import { MarkWeightEntity } from './Mark_weight.entity';
 import { StudentEntity } from './Student.entity';
@@ -70,6 +72,9 @@ export class SubjectClassEntity extends BaseEntity {
   @ManyToOne((type) => SubjectEntity, (sb) => sb.subject_classes)
   @JoinColumn({ name: 'subject_id' })
   subject: SubjectEntity;
+
+  @OneToMany(() => AssignmentEntity, (a) => a.subject_class)
+  assignments: AssignmentEntity[];
 
   @CreateDateColumn()
   created_at: Date;

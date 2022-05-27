@@ -41,6 +41,8 @@ import { TimetableModule } from './timetable/timetable.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { UploadModule } from './upload/upload.module';
 import { ChatModule } from './chat/chat.module';
+import { AssignmentModule } from './assignment/assignment.module';
+import { AssignmentEntity } from './entity/Assignment.entity';
 
 @Module({
   imports: [
@@ -78,6 +80,7 @@ import { ChatModule } from './chat/chat.module';
         MarkDetailsEntity,
         MarkWeightEntity,
         AttendanceEntity,
+        AssignmentEntity,
       ],
       synchronize: true,
     }),
@@ -111,6 +114,7 @@ import { ChatModule } from './chat/chat.module';
     AttendanceModule, //
     UploadModule,
     ChatModule,
+    AssignmentModule,
   ],
   controllers: [],
   providers: [],

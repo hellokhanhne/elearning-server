@@ -166,6 +166,8 @@ export class StudentService {
       relations: [
         'student_subject_classes',
         'student_subject_classes.subject_class_timetable',
+        'student_subject_classes.subject_class_timetable.attendance',
+        'student_subject_classes.subject_class_timetable.attendance.attendance_students_absent',
         'student_subject_classes.subject_class_leturer',
         'student_subject_classes.subject_class_leturer.leturer_level',
       ],
