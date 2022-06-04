@@ -235,7 +235,7 @@ export class StudentService {
             subject_class_name,
             subject_class_leturer,
             subject_class_short_name,
-            timeLeft: moment.utc(as.deadline).fromNow(),
+            timeLeft: moment(as.deadline).utc().fromNow(),
           });
         });
       }
