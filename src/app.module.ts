@@ -43,6 +43,8 @@ import { UploadModule } from './upload/upload.module';
 import { ChatModule } from './chat/chat.module';
 import { AssignmentModule } from './assignment/assignment.module';
 import { AssignmentEntity } from './entity/Assignment.entity';
+import { DealineDone } from './entity/DealineDone';
+import { DeadlineDoneModule } from './deadline_done/deadline_done.module';
 
 @Module({
   imports: [
@@ -81,6 +83,7 @@ import { AssignmentEntity } from './entity/Assignment.entity';
         MarkWeightEntity,
         AttendanceEntity,
         AssignmentEntity,
+        DealineDone,
       ],
       synchronize: true,
     }),
@@ -114,7 +117,8 @@ import { AssignmentEntity } from './entity/Assignment.entity';
     AttendanceModule, //
     UploadModule,
     ChatModule,
-    // AssignmentModule,
+    AssignmentModule,
+    DeadlineDoneModule,
   ],
   controllers: [],
   providers: [],

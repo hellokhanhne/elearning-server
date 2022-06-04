@@ -7,10 +7,8 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  OneToMany, PrimaryGeneratedColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { AssignmentEntity } from './Assignment.entity';
 import { LecturersEntity } from './Lecturers.entity';

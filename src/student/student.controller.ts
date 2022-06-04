@@ -130,6 +130,17 @@ export class StudentController {
     });
   }
 
+  @Get('/deadline')
+  async studentDealine(@Res() res: Response, @Req() req: RequestDto) {
+    const deadlines = await this.studentService.studentDealine(req.user.id);
+    return GetDataPartternRes({
+      res,
+      success: true,
+      type: 'deadline',
+      data: deadlines,
+    });
+  }
+
   @Get('/:id')
   async findOne(@Param('id') id: string, @Res() res: Response) {
     const student = await this.studentService.findOne(+id);

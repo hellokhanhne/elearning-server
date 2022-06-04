@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { AttendanceEntity } from '../entity/Attendance';
 import { ClassEntity } from './Class.entity';
+import { DealineDone } from './DealineDone';
 import { MarkDetailsEntity } from './Mark_details.entity';
 import { RoleEntity } from './Role.entity';
 import { SubjectClassEntity } from './SubjectClass.entity';
@@ -70,4 +71,7 @@ export class StudentEntity extends BaseEntity {
 
   @ManyToOne((type) => AttendanceEntity, (a) => a.attendance_students_absent)
   student_attendance: AttendanceEntity;
+
+  @OneToMany(() => DealineDone, (d) => d.student)
+  dealines: DealineDone[];
 }

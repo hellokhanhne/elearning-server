@@ -212,6 +212,37 @@ export class StudentService {
     );
   }
 
+  async studentDealine(userId: number) {
+    const data = [];
+    const student = await this.studentRepository.findOne(userId, {
+      relations: [
+        'student_subject_classes',
+        'student_subject_classes.assignments',
+      ],
+    });
+    student.student_subject_classes.forEach((sb) => {
+      if (sb.assignments.length > 0) {
+        const {
+          subject_class_id,
+          subject_class_name,
+          subject_class_leturer,
+          subject_class_short_name,
+        } = sb;
+        sb.assignments.forEach((as) => {
+          data.push({
+            ...as,
+            subject_class_id,
+            subject_class_name,
+            subject_class_leturer,
+            subject_class_short_name,
+            timeLeft: moment.utc(as.deadline).tz('Asia/Saigon').fromNow(),
+          });
+        });
+      }
+    });
+    return data;
+  }
+
   async update(id: number, updateStudentDto: UpdateStudentDto) {
     const role = await this.roleSer.findOne(updateStudentDto.role_id);
     if (!role)
