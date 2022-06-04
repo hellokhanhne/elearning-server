@@ -229,13 +229,23 @@ export class StudentService {
           subject_class_short_name,
         } = sb;
         sb.assignments.forEach((as) => {
+          const diff = moment(as.deadline, 'DD/MM/YYYY HH:mm:ss').diff(
+            moment(moment(), 'DD/MM/YYYY HH:mm:ss'),
+          );
+          const time = moment.duration(diff, 'milliseconds');
+
           data.push({
             ...as,
             subject_class_id,
             subject_class_name,
             subject_class_leturer,
             subject_class_short_name,
-            timeLeft: moment(as.deadline).utc().fromNow(),
+            timeLeft: [
+              time.asDays(),
+              time.asHours(),
+              time.asMinutes(),
+              time.asMilliseconds(),
+            ],
           });
         });
       }
