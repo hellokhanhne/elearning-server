@@ -229,9 +229,9 @@ export class StudentService {
           subject_class_short_name,
         } = sb;
         sb.assignments.forEach((as) => {
-          const diff = moment(as.deadline, 'DD/MM/YYYY HH:mm:ss').diff(
-            moment(moment(), 'DD/MM/YYYY HH:mm:ss'),
-          );
+          const diff = moment(as.deadline, 'DD/MM/YYYY HH:mm:ss')
+            .tz('Asia/Saigon')
+            .diff(moment(moment(), 'DD/MM/YYYY HH:mm:ss').tz('Asia/Saigon'));
           const time = moment.duration(diff, 'milliseconds');
 
           data.push({
