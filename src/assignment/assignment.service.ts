@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment-timezone';
 import { AssignmentEntity } from 'src/entity/Assignment.entity';
 import { SubjectClassEntity } from 'src/entity/SubjectClass.entity';
 import { Repository } from 'typeorm';
@@ -31,7 +32,8 @@ export class AssignmentService {
     assigment.content = createAssignmentDto.content;
     assigment.attachment = createAssignmentDto.attachment;
     assigment.subject_class = subject;
-    assigment.deadline = createAssignmentDto.deadline;
+    console.log(createAssignmentDto.deadline);
+    assigment.deadline = moment.utc(createAssignmentDto.deadline).toDate();
 
     await this.assiRep.save(assigment);
 

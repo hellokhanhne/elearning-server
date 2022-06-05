@@ -229,26 +229,15 @@ export class StudentService {
           subject_class_short_name,
         } = sb;
         sb.assignments.forEach((as) => {
-          const diff = moment(as.deadline, 'DD/MM/YYYY HH:mm:ss')
+          console.log(moment(as.deadline).tz('Asia/Saigon'));
+          console.log(moment(Date.now()).tz('Asia/Saigon'));
+          const diff = moment(as.deadline)
             .tz('Asia/Saigon')
-            .diff(moment(moment(), 'DD/MM/YYYY HH:mm:ss').tz('Asia/Saigon'));
+            .diff(moment(Date.now()).tz('Asia/Saigon'));
+
           const time = moment.duration(diff, 'milliseconds');
 
-          console.log(
-            'deadline time ',
-            moment
-              .utc(as.deadline)
-              .tz('Asia/Saigon')
-              .format('DD/MM/YYYY HH:mm:ss'),
-          );
-
-          console.log(
-            'now time ',
-            moment
-              .utc(Date.now())
-              .tz('Asia/Saigon')
-              .format('DD/MM/YYYY HH:mm:ss'),
-          );
+          console.log(time);
 
           data.push({
             ...as,
