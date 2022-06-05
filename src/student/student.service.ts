@@ -234,6 +234,16 @@ export class StudentService {
             .diff(moment(moment(), 'DD/MM/YYYY HH:mm:ss').tz('Asia/Saigon'));
           const time = moment.duration(diff, 'milliseconds');
 
+          console.log(
+            'deadline time ',
+            moment(as.deadline, 'DD/MM/YYYY HH:mm:ss').tz('Asia/Saigon'),
+          );
+
+          console.log(
+            'now time ',
+            moment(moment(), 'DD/MM/YYYY HH:mm:ss').tz('Asia/Saigon'),
+          );
+
           data.push({
             ...as,
             subject_class_id,
