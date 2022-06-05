@@ -236,12 +236,18 @@ export class StudentService {
 
           console.log(
             'deadline time ',
-            moment(as.deadline).tz('Asia/Saigon').format('DD/MM/YYYY HH:mm:ss'),
+            moment
+              .utc(as.deadline)
+              .tz('Asia/Saigon')
+              .format('DD/MM/YYYY HH:mm:ss'),
           );
 
           console.log(
             'now time ',
-            moment(moment()).tz('Asia/Saigon').format('DD/MM/YYYY HH:mm:ss'),
+            moment
+              .utc(Date.now())
+              .tz('Asia/Saigon')
+              .format('DD/MM/YYYY HH:mm:ss'),
           );
 
           data.push({
