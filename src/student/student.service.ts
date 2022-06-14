@@ -232,7 +232,7 @@ export class StudentService {
           subject_class_short_name,
         } = sb;
         sb.assignments.forEach((as) => {
-          data.push({
+          const _a = {
             ...as,
             subject_class_id,
             subject_class_name,
@@ -241,7 +241,9 @@ export class StudentService {
             deadline_done: as.deadlines.filter((d) =>
               ids.includes(d.deadline_id),
             ),
-          });
+          };
+          delete _a.deadlines;
+          data.push(_a);
         });
       }
     });

@@ -6,7 +6,7 @@ export const saveFileToStorage = {
     destination: './files/resource',
     filename: (req, file, cb) => {
       try {
-        console.log('req', req);
+        // console.log('req', req);
         const split = file.originalname.split('.');
         const fileNameExtension: string = '.' + split[split.length - 1];
         const fileName: string = uuidv4() + fileNameExtension;

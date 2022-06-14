@@ -38,7 +38,7 @@ export class DeadlineDoneService {
       deadline_done.student = user;
       deadline_done.assigment = assigment;
 
-      console.log(deadline_done);
+      // console.log(deadline_done);
 
       await this.delRep.save(deadline_done);
       return deadline_done;

@@ -36,8 +36,9 @@ export class DeadlineDoneController {
     @Res() res: Response,
     @Req() req: RequestDto,
   ) {
-    console.log('req', req);
-    console.log(createDeadlineDoneDto, file);
+    // console.log('req', req.body);
+    // console.log('file', file);
+    // console.log(createDeadlineDoneDto, file);
     const filename = file?.filename;
     createDeadlineDoneDto.attachment = filename;
     const data: any = await this.deadlineDoneService.create(
