@@ -229,28 +229,12 @@ export class StudentService {
           subject_class_short_name,
         } = sb;
         sb.assignments.forEach((as) => {
-          console.log(moment(as.deadline).tz('Asia/Saigon'));
-          console.log(moment(Date.now()).tz('Asia/Saigon'));
-          const diff = moment(as.deadline)
-            .tz('Asia/Saigon')
-            .diff(moment(Date.now()).tz('Asia/Saigon'));
-
-          const time = moment.duration(diff, 'milliseconds');
-
-          console.log(time);
-
           data.push({
             ...as,
             subject_class_id,
             subject_class_name,
             subject_class_leturer,
             subject_class_short_name,
-            timeLeft: [
-              time.asDays(),
-              time.asHours(),
-              time.asMinutes(),
-              time.asMilliseconds(),
-            ],
           });
         });
       }
