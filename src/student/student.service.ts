@@ -217,9 +217,12 @@ export class StudentService {
     const student = await this.studentRepository.findOne(userId, {
       relations: [
         'student_subject_classes',
+        'dealines',
         'student_subject_classes.assignments',
+        'student_subject_classes.assignments.deadlines',
       ],
     });
+    const ids = student.dealines.map((d) => d.deadline_id);
     student.student_subject_classes.forEach((sb) => {
       if (sb.assignments.length > 0) {
         const {
@@ -235,6 +238,9 @@ export class StudentService {
             subject_class_name,
             subject_class_leturer,
             subject_class_short_name,
+            deadline_done: as.deadlines.filter((d) =>
+              ids.includes(d.deadline_id),
+            ),
           });
         });
       }
