@@ -31,7 +31,7 @@ export class DeadlineDoneService {
         };
       }
 
-      console.log(assigment);
+      // console.log(assigment);
 
       const deadline_done = new DealineDone();
       deadline_done.attachment = createDeadlineDoneDto.attachment;
