@@ -6,6 +6,6 @@ export class CreateDeadlineDoneDto {
   attachment: string;
   @Transform(({ value }) => value)
   @ApiProperty()
-  @IsNotEmpty()
+  // @IsNotEmpty()
   assigment_id: number;
 }
