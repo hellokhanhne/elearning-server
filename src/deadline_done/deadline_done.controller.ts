@@ -22,8 +22,8 @@ import { CreateDeadlineDoneDto } from './dto/create-deadline_done.dto';
 import { UpdateDeadlineDoneDto } from './dto/update-deadline_done.dto';
 import { createDeadlineDoneSchema } from './schema/dealine_done.schema';
 
-@ApiTags('/deadline-done')
-@Controller('deadline-done')
+@ApiTags('//api/deadline-done')
+@Controller('/api/deadline-done')
 export class DeadlineDoneController {
   constructor(private readonly deadlineDoneService: DeadlineDoneService) {}
 
