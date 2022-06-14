@@ -26,7 +26,7 @@ export class DealineDone extends BaseEntity {
   @ManyToOne(() => StudentEntity, (d) => d.dealines)
   student: StudentEntity;
 
-  @CreateDateColumn()
+  @Column()
   created_at: Date;
 
   @UpdateDateColumn()

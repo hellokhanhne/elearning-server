@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment-timezone';
 import { AssignmentEntity } from 'src/entity/Assignment.entity';
 import { DealineDone } from 'src/entity/DealineDone';
 import { StudentEntity } from 'src/entity/Student.entity';
@@ -36,6 +37,7 @@ export class DeadlineDoneService {
       const deadline_done = new DealineDone();
       deadline_done.attachment = createDeadlineDoneDto.attachment;
       deadline_done.student = user;
+      deadline_done.created_at = moment.utc(Date.now()).toDate();
       deadline_done.assigment = assigment;
 
       // console.log(deadline_done);
